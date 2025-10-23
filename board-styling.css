@@ -1,0 +1,84 @@
+body {
+    background-color: antiquewhite;
+}
+#board {
+    position: absolute;
+    z-index: -1;
+    /* 500x475 px  +- % */
+    width: 550px;
+    height: 522.5px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color:antiquewhite;
+}
+
+#board-game .moving-piece {
+    transform: translate(13.5px, 15px) scale(0.15);
+
+    position: absolute;
+    z-index: 2;
+
+    fill:#FAEBD7;
+    stroke:#700000;
+    stroke-width: 2px;
+}
+#board-game .board-piece {
+    transform: translate(13.5px, 15px) scale(0.15);
+
+    fill: #ff0000; 
+    stroke: #700000;
+    stroke-width: 2px;
+}
+#board-game #edge {
+    stroke-width: 1.5px;
+}
+
+#board-game .letter {
+    transform: translate(13.5px, 15px) scale(0.15);
+
+    fill: #ffffff; 
+    stroke: #700000;
+    stroke-width: 2px;
+}
+#board-game .board-hole{
+    transform: translate(13.5px, 15px) scale(0.15);
+
+    fill: #503030;
+    stroke: #700000;
+    stroke-width: 1px;
+}
+#board-background{
+    transform: translate(13.5px, 15px) scale(0.15);
+
+    fill:#bc0000;
+    stroke:#700000;
+    stroke-width: 2px;
+}
+
+#trigger {
+    fill: #FAEBD7;
+    stroke: #700000;
+    stroke-width: 0.5px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+#trigger-pusher {
+    transition: transform 0.1s ease;
+    transform-origin: center;
+    transform-box: fill-box;
+}
+#pusher {
+    #trigger {
+    fill: #FAEBD7;
+    stroke: #700000;
+    stroke-width: 0.5px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+}
+#pusher-trigger {
+    transition: transform 0.1s ease;
+    transform-origin: center;
+    transform-box: fill-box;
+}
