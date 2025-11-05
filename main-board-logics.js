@@ -151,4 +151,3 @@ document.addEventListener('keydown', (event) => {
         push_trigger();
     }
 });
-

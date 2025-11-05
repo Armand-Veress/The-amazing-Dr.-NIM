@@ -1,12 +1,13 @@
 body {
     background-color: antiquewhite;
 }
+
 #board {
     position: absolute;
     z-index: -1;
     /* 500x475 px  +- % */
-    width: 550px;
-    height: 522.5px;
+    width: 500px;
+    height: 475px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -14,7 +15,7 @@ body {
 }
 
 #board-game .moving-piece {
-    transform: translate(13.5px, 15px) scale(0.15);
+    transform: translate(-5px, -1px) scale(0.15);
 
     position: absolute;
     z-index: 2;
@@ -24,52 +25,49 @@ body {
     stroke-width: 2px;
 }
 #board-game .board-piece {
-    transform: translate(13.5px, 15px) scale(0.15);
+    transform: translate(-5px, -1px) scale(0.15);
 
     fill: #ff0000; 
     stroke: #700000;
     stroke-width: 2px;
 }
+
 #board-game #edge {
     stroke-width: 1.5px;
 }
 
 #board-game .letter {
-    transform: translate(13.5px, 15px) scale(0.15);
+    transform: translate(-5px, -1px) scale(0.15);
 
     fill: #ffffff; 
     stroke: #700000;
     stroke-width: 2px;
 }
 #board-game .board-hole{
-    transform: translate(13.5px, 15px) scale(0.15);
+    transform: translate(-5px, -1px) scale(0.15);
 
     fill: #503030;
     stroke: #700000;
     stroke-width: 1px;
 }
+
+
 #board-game .marble {
-    transform: translate(13.5px, 15px) scale(0.15);
+    transform: translate(-5px, -1px) scale(0.15);
 
     fill: url(#marbleGradient);
     stroke:#700000;
     stroke-width: 2px;
 }
+
+
 #board-game .paths {
-    transform: translate(13.5px, 15px) scale(0.15);
+    transform: translate(-5px, -1px) scale(0.15);
 
     fill: none;
-    /*
-    stroke: black;
-    stroke-width: 3px;
-    #path-2 {
-        stroke: black;
-        stroke-width: 2px;
-    }
-    */
 }
 #board-background{
-    transform: translate(13.5px, 15px) scale(0.15);
+    transform: translate(-5px, -1px) scale(0.15);
 
     fill:#bc0000;
     stroke:#700000;
