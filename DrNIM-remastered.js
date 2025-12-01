@@ -135,6 +135,61 @@ const trigger_pusher = document.getElementById("trigger-pusher");
 const pusher = document.getElementById("pusher");
 const pusher_trigger = document.getElementById("pusher-trigger");
 
+const tagPromise = (promise, source) => {
+    return promise.then(result => ({ source, result }));
+};
+
+const turnerListener = () => turn(turner);
+const equalizerListener = () => turn(equalizer);
+const rightFlipFlopListener = () => turn(right_flip_flop);
+const middleFlipFlopListener = () => turn(middle_flip_flop);
+const leftFlipFlopListener = () => turn(left_flip_flop);
+
+
+function triggerListener(){
+  push_trigger(); 
+  roll();
+}
+
+function enterListener(event) {
+  if (event.key === 'Enter') {
+    try{
+      push_trigger();
+      roll();
+    }
+    catch (error) {
+      console.error("Error caught:", error.message || error);
+      alert("An error occurred: " + (error.message || error));
+    }
+  }
+}
+
+function waitForEvent(element, eventName) {
+    return new Promise((resolve) => {
+        function handler(event) {
+            element.removeEventListener(eventName, handler);
+            resolve(event);
+        }
+
+        element.addEventListener(eventName, handler);
+    });
+}
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function waitForSignal() {
+    return new Promise(resolve => {
+        const checkSignal = () => {
+            if (signal) {
+                resolve();
+            } else {
+                setTimeout(checkSignal, 50);
+            }
+        };
+        checkSignal();
+    });
+}
 
 function getRotatingPoint(piece){
     const element = document.getElementById(piece.element_id);
@@ -178,29 +233,6 @@ async function push_trigger() {
     trigger_pusher.style.transform = '';
     pusher_trigger.style.transform = '';
 }
-
-function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function triggerListener(){
-  push_trigger(); 
-  roll();
-}
-
-function enterListener(event) {
-  if (event.key === 'Enter') {
-    try{
-      push_trigger();
-      roll();
-    }
-    catch (error) {
-      console.error("Error caught:", error.message || error);
-      alert("An error occurred: " + (error.message || error));
-    }
-  }
-}
-
 
 async function roll_path_1(marble, currentMarble, marbleNum) {
     const point = path_1.getPointAtLength(marble.progress * path_1_Length);
@@ -523,7 +555,7 @@ async function roll_path_5(marble, currentMarble, marbleNum) {
         }
         if(currentMarble > 8){
             const df = marbles[currentMarble-1].progress - end_slots[marbles[currentMarble-1].endSlot];
-            move_forward(marble, marble.endSlot, df, marble.insertSpeed);
+            move_forward(marble, marble.endSlot, marble_endLength/2, marble.insertSpeed);
         }
     }
 }
@@ -559,7 +591,6 @@ async function roll_path_6(marble, currentMarble, marbleNum) {
         requestAnimationFrame(() => roll_path_6(marble, currentMarble));
     }
     else {
-        console.log(marble.pusherTriggered + "????????????\n");
         marble.endPoint = 15;
         position_in_endSlot(marble, 15);
         marble.endSlot = currentMarble+1;
@@ -574,7 +605,7 @@ async function roll_path_6(marble, currentMarble, marbleNum) {
         }
         if(currentMarble > 8){
             const df = marbles[currentMarble-1].progress - end_slots[marbles[currentMarble-1].endSlot];
-            move_forward(marble, marble.endSlot, df, marble.insertSpeed);
+            move_forward(marble, marble.endSlot, marble_endLength/2, marble.insertSpeed);
         }
     }
 }
@@ -748,17 +779,17 @@ function determine_path() {
         return 1;
     else if (right_flip_flop.flipped == -1 && middle_flip_flop.flipped == -1 && left_flip_flop.flipped ==  1)
         return 2;
-    else if (right_flip_flop.flipped == -1 && middle_flip_flop.flipped ==  1 && left_flip_flop.flipped == -1 && equalizer.flipped == -1)
+    else if (right_flip_flop.flipped == -1 && middle_flip_flop.flipped ==  1 && equalizer.flipped == -1)
         return 3;
-    else if (right_flip_flop.flipped == -1 && middle_flip_flop.flipped ==  1 && left_flip_flop.flipped == -1 && equalizer.flipped ==  1 && turner.flipped == -1)
+    else if (right_flip_flop.flipped == -1 && equalizer.flipped ==  1 && turner.flipped == -1)
         return 4;
-    else if (right_flip_flop.flipped == -1 && middle_flip_flop.flipped ==  1 && left_flip_flop.flipped == -1 && equalizer.flipped ==  1 && turner.flipped ==  1)
+    else if (right_flip_flop.flipped == -1 && middle_flip_flop.flipped ==  1 && equalizer.flipped ==  1 && turner.flipped ==  1)
         return 5;
-    else if (right_flip_flop.flipped ==  1 && middle_flip_flop.flipped == -1 && left_flip_flop.flipped == -1 && equalizer.flipped ==  1 && turner.flipped ==  1)
+    else if (right_flip_flop.flipped ==  1 && equalizer.flipped ==  1 && turner.flipped ==  1)
         return 6;
-    else if (right_flip_flop.flipped ==  1 && middle_flip_flop.flipped == -1 && left_flip_flop.flipped == -1 && equalizer.flipped ==  1 && turner.flipped == -1)
+    else if (right_flip_flop.flipped ==  1 && middle_flip_flop.flipped == -1 && equalizer.flipped ==  1 && turner.flipped == -1)
         return 7;
-    else if (right_flip_flop.flipped ==  1 && middle_flip_flop.flipped == -1 && left_flip_flop.flipped == -1 && equalizer.flipped == -1)
+    else if (right_flip_flop.flipped ==  1 && equalizer.flipped == -1)
         return 8;
 }
 
@@ -916,39 +947,152 @@ function fall_back(marble, slot, df, speed) {
     }
 }
 
-async function loadGame(marbleNum){
-  for (let i = 0; i < marbleNum; i++) {
-    const rotatorId = `marble-${i}-roller`;
-    const marbleId = `marble-${i}`;
-    const roller = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    roller.setAttribute("id", rotatorId);
-    const marbleElement = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    marbleElement.setAttribute("class", "marble");
-    marbleElement.setAttribute("id", marbleId);
-    const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    circle.setAttribute("cx", "158");
-    circle.setAttribute("cy", "72");
-    circle.setAttribute("r", "15");
-    marbleElement.appendChild(circle);
-    roller.appendChild(marbleElement);
-    boardGame.appendChild(roller);
-    const marble = new Marble(rotatorId, marbleId, {
-        progress: 0,
-        lastX: null,
-        lastY: null,
-        leftTriggered: false,
-        middleTriggered: false,
-        rightTriggered: false,
-        turnerTriggered: false,
-        pusherTriggered: false,
-        equalizerTriggered: false,
-        inserted: false,
-        endSlot: 15
-    });
-    marble.cp = getRotatingPoint(marble);
-    marbles.push(marble);
-    position_in_startSlot(marble, i+1);
-  }
+function unlock_pieces(){
+    document.getElementById(turner.element_id).addEventListener("click", turnerListener);
+    document.getElementById(equalizer.element_id).addEventListener("click", equalizerListener);
+    document.getElementById(right_flip_flop.element_id).addEventListener("click", rightFlipFlopListener);
+    document.getElementById(middle_flip_flop.element_id).addEventListener("click", middleFlipFlopListener);
+    document.getElementById(left_flip_flop.element_id).addEventListener("click", leftFlipFlopListener);
+}
+
+function lock_pieces(){
+    document.getElementById(turner.element_id).removeEventListener("click", turnerListener);
+    document.getElementById(equalizer.element_id).removeEventListener("click", equalizerListener);
+    document.getElementById(right_flip_flop.element_id).removeEventListener("click", rightFlipFlopListener);
+    document.getElementById(middle_flip_flop.element_id).removeEventListener("click", middleFlipFlopListener);
+    document.getElementById(left_flip_flop.element_id).removeEventListener("click", leftFlipFlopListener);
+}
+
+function configure_DrNIM(marbleNum, goal, playersTurn){
+    
+    if(goal == 1){ // Last marble wins
+        if(marbleNum % 4 == 0){
+            if(left_flip_flop.flipped   == -1)
+                turn(left_flip_flop);
+            if(middle_flip_flop.flipped ==  1)
+                turn(middle_flip_flop);
+            if(right_flip_flop.flipped  ==  1)
+                turn(right_flip_flop);
+            if(equalizer.flipped        ==  1)
+                turn(equalizer);
+        }
+        else if(marbleNum % 4 == 3){
+            if(left_flip_flop.flipped   ==  1)
+            turn(left_flip_flop);
+            if(middle_flip_flop.flipped == -1)
+                turn(middle_flip_flop);
+            if(right_flip_flop.flipped  ==  1)
+                turn(right_flip_flop);
+            if(equalizer.flipped        ==  1)
+                turn(equalizer);
+        }
+        else if(marbleNum % 4 == 2){
+            if(left_flip_flop.flipped   ==  1)
+                turn(left_flip_flop);
+            if(middle_flip_flop.flipped ==  1)
+                turn(middle_flip_flop);
+            if(right_flip_flop.flipped  == -1)
+                turn(right_flip_flop);
+            if(equalizer.flipped        ==  1)
+                turn(equalizer);
+        }
+        else if(marbleNum % 4 == 1){
+            if(left_flip_flop.flipped   ==  1)
+                turn(left_flip_flop);
+            if(middle_flip_flop.flipped ==  1)
+                turn(middle_flip_flop);
+            if(right_flip_flop.flipped  ==  1)
+                turn(right_flip_flop);
+            if(equalizer.flipped        ==  1)
+                turn(equalizer);
+        }
+    }
+    else if(goal == -1){ // Last marble looses
+        if(marbleNum % 4 == 0){
+            if(left_flip_flop.flipped   ==  1)
+                turn(left_flip_flop);
+            if(middle_flip_flop.flipped == -1)
+                turn(middle_flip_flop);
+            if(right_flip_flop.flipped  ==  1)
+                turn(right_flip_flop);
+            if(equalizer.flipped        ==  1)
+                turn(equalizer);
+        }
+        else if(marbleNum % 4 == 3){
+            if(left_flip_flop.flipped   ==  1)
+                turn(left_flip_flop);
+            if(middle_flip_flop.flipped ==  1)
+                turn(middle_flip_flop);
+            if(right_flip_flop.flipped  == -1)
+                turn(right_flip_flop);
+            if(equalizer.flipped        ==  1)
+                turn(equalizer);
+        }
+        else if(marbleNum % 4 == 2){
+            if(left_flip_flop.flipped   ==  1)
+                turn(left_flip_flop);
+            if(middle_flip_flop.flipped ==  1)
+                turn(middle_flip_flop);
+            if(right_flip_flop.flipped  ==  1)
+                turn(right_flip_flop);
+            if(equalizer.flipped        ==  1)
+                turn(equalizer);
+        }
+        else if(marbleNum % 4 == 1){
+            if(left_flip_flop.flipped   == -1)
+                turn(left_flip_flop);
+            if(middle_flip_flop.flipped ==  1)
+                turn(middle_flip_flop);
+            if(right_flip_flop.flipped  ==  1)
+                turn(right_flip_flop);
+            if(equalizer.flipped        ==  1)
+                turn(equalizer);
+        }    
+    }
+    
+    if(playersTurn == true){
+        if(turner.flipped ==  1)
+            turn(turner);
+    }
+    else if (playersTurn == false){
+        if(turner.flipped == -1)
+            turn(turner);
+    }
+}
+
+async function loadGame_original(marbleNum){ // just as the original physical model of Dr. NIM
+    for (let i = 0; i < marbleNum; i++) {
+        const rotatorId = `marble-${i}-roller`;
+        const marbleId = `marble-${i}`;
+        const roller = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        roller.setAttribute("id", rotatorId);
+        const marbleElement = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        marbleElement.setAttribute("class", "marble");
+        marbleElement.setAttribute("id", marbleId);
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("cx", "158");
+        circle.setAttribute("cy", "72");
+        circle.setAttribute("r", "15");
+        marbleElement.appendChild(circle);
+        roller.appendChild(marbleElement);
+        boardGame.appendChild(roller);
+        const marble = new Marble(rotatorId, marbleId, {
+            progress: 0,
+            lastX: null,
+            lastY: null,
+            leftTriggered: false,
+            middleTriggered: false,
+            rightTriggered: false,
+            turnerTriggered: false,
+            pusherTriggered: false,
+            equalizerTriggered: false,
+            inserted: false,
+            endSlot: 15
+        });
+        marble.cp = getRotatingPoint(marble);
+        marbles.push(marble);
+        position_in_startSlot(marble, i+1);
+    }
 
     await delay(500);
     advanceSlots(marbleNum, 0);
@@ -957,6 +1101,7 @@ async function loadGame(marbleNum){
   
     for(let i = 0; i < marbleNum; i++) {
         if(signal) {
+            unlock_pieces();
             const keydownPromise = waitForEvent(document, 'keydown');
             const mousedownPromise = waitForEvent(trigger, 'mousedown');
 
@@ -964,6 +1109,7 @@ async function loadGame(marbleNum){
 
             try{
                 signal = false;
+                lock_pieces();
                 push_trigger();
                 release_marble(i, marbleNum);
                 advanceSlots(marbleNum, i + 1);
@@ -991,30 +1137,138 @@ async function loadGame(marbleNum){
     }
 }
 
+async function loadGame_playDrNIM(marbleNum, goal, playersTurn){ // play against Dr. NIM
+    configure_DrNIM(marbleNum, goal, playersTurn); 
 
+    for (let i = 0; i < marbleNum; i++) {
+        const rotatorId = `marble-${i}-roller`;
+        const marbleId = `marble-${i}`;
+        const roller = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        roller.setAttribute("id", rotatorId);
+        const marbleElement = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        marbleElement.setAttribute("class", "marble");
+        marbleElement.setAttribute("id", marbleId);
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("cx", "158");
+        circle.setAttribute("cy", "72");
+        circle.setAttribute("r", "15");
+        marbleElement.appendChild(circle);
+        roller.appendChild(marbleElement);
+        boardGame.appendChild(roller);
+        const marble = new Marble(rotatorId, marbleId, {
+            progress: 0,
+            lastX: null,
+            lastY: null,
+            leftTriggered: false,
+            middleTriggered: false,
+            rightTriggered: false,
+            turnerTriggered: false,
+            pusherTriggered: false,
+            equalizerTriggered: false,
+            inserted: false,
+            endSlot: 15
+        });
+        marble.cp = getRotatingPoint(marble);
+        marbles.push(marble);
+        position_in_startSlot(marble, i+1);
+    }
 
+    await delay(500);
+    advanceSlots(marbleNum, 0);
+    await delay(500);
+    signal = true;
+    
+    let winner; 
+    let lastTurn;
 
-loadGame(15);
+    for(let i = 0; i < marbleNum; i++) {
+        if(signal && turner.flipped == -1)
+            playersTurn = true;
+        else if(signal && turner.flipped == 1)
+            playersTurn = false;
+           
+        if(playersTurn && signal) {
+            nextTurn = turner.flipped;
 
-function waitForEvent(element, eventName) {
-    return new Promise((resolve) => {
-        function handler(event) {
-            element.removeEventListener(eventName, handler);
-            resolve(event);
+            const keydownPromise = waitForEvent(document, 'keydown');
+            const mousedownPromise = waitForEvent(trigger, 'mousedown');
+            const nextTurnPromise = waitForEvent(document.getElementById(turner.element_id), 'click');
+
+            const solved = await Promise.race([
+                tagPromise(keydownPromise, 'keydown'),
+                tagPromise(mousedownPromise, 'mousedown'),
+                tagPromise(nextTurnPromise, 'turnerClick')
+            ]);
+
+            if(solved.source == 'turnerClick'){
+                turn(turner);
+                await delay(400);
+            }
+
+            if(turner.flipped != nextTurn){
+                playersTurn = !playersTurn;
+            }
+
+            try{
+                signal = false;
+                push_trigger();
+                release_marble(i, marbleNum);
+                advanceSlots(marbleNum, i + 1);
+
+                lastTurn = playersTurn;
+            }
+            catch(error){
+                console.log(error);
+            }
         }
+        else if(!playersTurn && signal){
+            try{
+                signal = false;
+                push_trigger();
+                release_marble(i, marbleNum);
+                advanceSlots(marbleNum, i + 1);
+            }
+            catch(error){
+                console.log(error);
+            }
+            
+            lastTurn = playersTurn;
+        }
+        else  {
+            await delay(200); 
+            i -= 1;
+            if(marbles[i].pusherTriggered){
+                try{
+                    signal = false;
+                    i += 1;
+                    push_trigger();
+                    release_marble(i, marbleNum);
+                    advanceSlots(marbleNum, i + 1);
+                }
+                catch(error){
+                    console.log(error);
+                }  
+            }
+        }
+    }
 
-        element.addEventListener(eventName, handler);
-    });
+    await waitForSignal();
+    if(goal == 1){
+        if(lastTurn == true)
+            alert("Game ended: You win!");
+        else
+            alert("Game ended: Dr. NIM wins!");
+    }
+    if(goal == -1){
+        if(lastTurn == false)
+            alert("Game ended: You win!");
+        else
+            alert("Game ended: Dr. NIM wins!");
+    }
 }
 
 
-document.getElementById(turner.element_id).addEventListener("click", () => turn(turner));
-document.getElementById(equalizer.element_id).addEventListener("click", () => turn(equalizer));
-
-document.getElementById(right_flip_flop.element_id).addEventListener("click", () => turn(right_flip_flop));
-document.getElementById(middle_flip_flop.element_id).addEventListener("click", () => turn(middle_flip_flop));
-document.getElementById(left_flip_flop.element_id).addEventListener("click", () => turn(left_flip_flop));
-
+loadGame_playDrNIM(4, 1, true);
 
 
 /** Menu & rules & button events */
