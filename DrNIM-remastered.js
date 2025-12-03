@@ -1,6 +1,7 @@
 const board_transforms = {scale: 0.15, translateX: -5, translateY: -1};
 const boardGame = document.getElementById("board-game");
 const marbles = [];
+let gameStarted = false;
 let signal = true;
 
 const path_1 = document.querySelector("#path-1 path");
@@ -145,6 +146,23 @@ const rightFlipFlopListener = () => turn(right_flip_flop);
 const middleFlipFlopListener = () => turn(middle_flip_flop);
 const leftFlipFlopListener = () => turn(left_flip_flop);
 
+async function removeAllMarbles() {
+    const mrbls = document.querySelectorAll('.marble');
+
+    mrbls.forEach(marble => {
+        const roller = marble.closest('g[id$="-roller"]'); 
+
+        if (roller && roller.parentNode) {
+            roller.parentNode.removeChild(roller);
+        } else {
+            marble.parentNode.removeChild(marble);
+        }
+    });
+
+    marbles.length = 0;
+
+    return Promise.resolve("All marbles removed successfully.");
+}
 
 function triggerListener(){
   push_trigger(); 
@@ -1060,7 +1078,92 @@ function configure_DrNIM(marbleNum, goal, playersTurn){
     }
 }
 
-async function loadGame_original(marbleNum){ // just as the original physical model of Dr. NIM
+
+async function loadGame_background(){
+    await removeAllMarbles();
+    configure_DrNIM(9, 1, true);
+
+    for (let i = 0; i < 15; i++) {
+        const rotatorId = `marble-${i}-roller`;
+        const marbleId = `marble-${i}`;
+        const roller = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        roller.setAttribute("id", rotatorId);
+        const marbleElement = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        marbleElement.setAttribute("class", "marble");
+        marbleElement.setAttribute("id", marbleId);
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("cx", "158");
+        circle.setAttribute("cy", "72");
+        circle.setAttribute("r", "15");
+        marbleElement.appendChild(circle);
+        roller.appendChild(marbleElement);
+        boardGame.appendChild(roller);
+        const marble = new Marble(rotatorId, marbleId, {
+            progress: 0,
+            lastX: null,
+            lastY: null,
+            leftTriggered: false,
+            middleTriggered: false,
+            rightTriggered: false,
+            turnerTriggered: false,
+            pusherTriggered: false,
+            equalizerTriggered: false,
+            inserted: false,
+            endSlot: 15
+        });
+        marble.cp = getRotatingPoint(marble);
+        marbles.push(marble);
+        if(i <= 6)
+            position_in_endSlot(marble, i+1);
+        else
+            position_in_startSlot(marble, i-7);
+    }
+
+    try{
+        await delay(1500);
+        signal = false;
+        push_trigger();
+        release_marble(7, 15);
+        advanceSlots(15, 8);
+        await waitForSignal();
+
+        startFlip_FlopCounter();
+    }
+    catch(error){
+        console.log(error);
+    }
+
+    function startFlip_FlopCounter(){
+        const set = [
+            {l: -1, m: -1, r: -1}, 
+            {l:  1, m: -1, r: -1},
+            {l: -1, m:  1, r: -1},
+            {l: -1, m: -1, r:  1}
+        ];
+
+        async function iterations(i=0){
+            for(let i=0; i <= 1000; i++){
+                if(gameStarted) return;
+
+                const promises = [];
+                if(set[i%4].l !== left_flip_flop.flipped)
+                    promises.push(turn(left_flip_flop));
+                if(set[i%4].m !== middle_flip_flop.flipped)
+                    promises.push(turn(middle_flip_flop));
+                if(set[i%4].r !== right_flip_flop.flipped)
+                    promises.push(turn(right_flip_flop));
+                await Promise.all(promises); 
+                await delay(1000);
+            }
+        }
+
+        iterations();
+    }
+}
+
+async function loadGame_originalDrNIM(marbleNum){ // just as the original physical model of Dr. NIM
+    await removeAllMarbles();
+
     for (let i = 0; i < marbleNum; i++) {
         const rotatorId = `marble-${i}-roller`;
         const marbleId = `marble-${i}`;
@@ -1138,6 +1241,7 @@ async function loadGame_original(marbleNum){ // just as the original physical mo
 }
 
 async function loadGame_playDrNIM(marbleNum, goal, playersTurn){ // play against Dr. NIM
+    await removeAllMarbles();
     configure_DrNIM(marbleNum, goal, playersTurn); 
 
     for (let i = 0; i < marbleNum; i++) {
@@ -1178,7 +1282,6 @@ async function loadGame_playDrNIM(marbleNum, goal, playersTurn){ // play against
     await delay(500);
     signal = true;
     
-    let winner; 
     let lastTurn;
 
     for(let i = 0; i < marbleNum; i++) {
@@ -1268,7 +1371,116 @@ async function loadGame_playDrNIM(marbleNum, goal, playersTurn){ // play against
 }
 
 
-loadGame_playDrNIM(4, 1, true);
+async function loadGame_watchDrNIM(marbleNum, goal){ // watch Dr. NIM play against himself
+    await removeAllMarbles();
+    configure_DrNIM(marbleNum, goal, false); 
+
+    for (let i = 0; i < marbleNum; i++) {
+        const rotatorId = `marble-${i}-roller`;
+        const marbleId = `marble-${i}`;
+        const roller = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        roller.setAttribute("id", rotatorId);
+        const marbleElement = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        marbleElement.setAttribute("class", "marble");
+        marbleElement.setAttribute("id", marbleId);
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("cx", "158");
+        circle.setAttribute("cy", "72");
+        circle.setAttribute("r", "15");
+        marbleElement.appendChild(circle);
+        roller.appendChild(marbleElement);
+        boardGame.appendChild(roller);
+        const marble = new Marble(rotatorId, marbleId, {
+            progress: 0,
+            lastX: null,
+            lastY: null,
+            leftTriggered: false,
+            middleTriggered: false,
+            rightTriggered: false,
+            turnerTriggered: false,
+            pusherTriggered: false,
+            equalizerTriggered: false,
+            inserted: false,
+            endSlot: 15
+        });
+        marble.cp = getRotatingPoint(marble);
+        marbles.push(marble);
+        position_in_startSlot(marble, i+1);
+    }
+
+    await delay(500);
+    advanceSlots(marbleNum, 0);
+    await delay(500);
+    signal = true;
+    
+    let DrNIMturn = 1; // 1- Dr. NIM 1 starts first; 2 - Dr. NIM 2's turn
+    let lastTurn;
+
+    await delay(2000);
+
+    for(let i = 0; i < marbleNum; i++) {   
+        if(signal){
+            if(turner.flipped == -1){
+                await delay(1000);
+                turn(turner);
+                await delay(600);
+            }
+
+            try{
+                signal = false;
+                push_trigger();
+                release_marble(i, marbleNum);
+                advanceSlots(marbleNum, i + 1);
+            }
+            catch(error){
+                console.log(error);
+            }
+            
+            lastTurn = DrNIMturn;
+        }
+        else  {
+            await delay(200); 
+            i -= 1;
+            if(marbles[i].pusherTriggered){
+                try{
+                    signal = false;
+                    i += 1;
+                    push_trigger();
+                    release_marble(i, marbleNum);
+                    advanceSlots(marbleNum, i + 1);
+                }
+                catch(error){
+                    console.log(error);
+                }  
+            }
+        }
+    }
+
+    await waitForSignal();
+    if(goal == 1){
+        if(lastTurn == 1)
+            alert("Game ended: Dr. NIM 1 wins!");
+        else
+            alert("Game ended: Dr. NIM 2 wins!");
+    }
+    if(goal == -1){
+        if(lastTurn == 2)
+            alert("Game ended: Dr. NIM 1 wins!");
+        else
+            alert("Game ended: Dr. NIM 2 wins!");
+    }
+}
+
+
+
+
+
+
+
+loadGame_background();
+
+
+
 
 
 /** Menu & rules & button events */
@@ -1286,11 +1498,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ---- START GAME ----
   startBtn.addEventListener("click", () => {
-    // Dispare meniul
     menuOverlay.style.display = "none";
    
-    // Aici poți adăuga funcția ta care pornește jocul
-    console.log("Jocul a început!");
+    gameStarted = true;
+    loadGame_watchDrNIM(15, 1);
   });
 
   // ---- RULES ----
@@ -1307,12 +1518,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // ---- EXIT ----
   exitBtn.addEventListener("click", () => {
-    // Închide pagina (funcționează doar în anumite contexte)
-    if (confirm("Sigur vrei să ieși din joc?")) {
-      // Încearcă să închidă fereastra
+    if (confirm("Are you sure you want to close the page?")) {
       window.close();
 
-      // Dacă nu merge (de exemplu în tab-uri normale), mergem la pagina anterioară
       if (!window.closed) {
         window.history.back();
       }
