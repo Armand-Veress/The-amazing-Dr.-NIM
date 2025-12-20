@@ -26,14 +26,8 @@ body{
     left: 50%;
     transform: translate(-50%, -50%);
     background-color:rgba(0, 0, 0, 0);
-}
 
-
-#board.opened-manual {
-    transform: translate(-4%, -50%);
-}
-#board.closed-manual {
-    transform: translate(-50%, -50%);
+    transition: transform 0.4s ease-in-out;
 }
 
 #info-help {
@@ -308,10 +302,11 @@ body{
 #pdf-viewer {
   position: fixed;
   left: 10 px;                    /* nu lipit de marginea dreaptă */
-  top: 50%;                       /* centrare verticală */
-  transform: translateY(-50%);    
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);  
   width: 45%;
-  height: 95%;                    /* mai mic ca să rămână spațiu sus/jos */
+  height: 95%;                    
   background: rgba(255, 255, 255, 0.97);
   border-radius: 15px;
   box-shadow: 0 0 20px rgba(0,0,0,0.25);
@@ -319,6 +314,7 @@ body{
   flex-direction: column;
   overflow: hidden;
   z-index: 999;
+  transition: transform 0.4s ease-in-out;
 }
 
 /* HEADER PDF */
@@ -332,6 +328,22 @@ body{
   align-items: center;
 }
 
+.header-buttons {
+  display: flex;
+  gap: 10px; /* Space between the two buttons */
+  align-items: center;
+}
+
+#pdf-viewer.split {
+  transform: translate(-100%, -50%);
+}
+#board.split {
+    transform: translate(-0%, -50%);
+}
+.center {
+    transform: translate(-50%, -50%);
+}
+
 #close-pdf {
   background: #ff0000;
   color: white;
@@ -340,6 +352,27 @@ body{
   border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
+}
+
+#split-pdf {
+  background: rgba(255, 230, 200, 0.90);
+  width: 40px; 
+  height: 36px;
+  border: none;
+  padding: 6px 8.5px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#split-pdf svg {
+  background:rgba(0, 0, 0, 0);
+  width: 24px;
+  height: 24px;
+  
+}
+
+#split-pdf:hover, #close-pdf:hover {
+  opacity: 0.8;
 }
 
 #close-pdf:hover {
@@ -382,7 +415,7 @@ body{
 
 .bottom-right {
   bottom: 10px;
-  right: 50px;
+  right: 100px;
 
   height: 70%;
 }

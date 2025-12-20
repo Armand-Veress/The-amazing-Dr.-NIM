@@ -1,7 +1,7 @@
 async function loadGame_originalDrNIM(marbleNum){ // just as the original physical model of Dr. NIM
     await removeAllMarbles();
     determineGoal(0);
-    
+
     for (let i = 0; i < marbleNum; i++) {
         const rotatorId = `marble-${i}-roller`;
         const marbleId = `marble-${i}`;
@@ -41,7 +41,7 @@ async function loadGame_originalDrNIM(marbleNum){ // just as the original physic
     signal = true;
   
     for(let i = 0; i < marbleNum; i++) {
-        if(signal) {
+        if(signal && !paused) {
             unlock_pieces();
             const keydownPromise = waitForKey('Enter');
             const mousedownPromise = waitForEvent(trigger, 'mousedown');

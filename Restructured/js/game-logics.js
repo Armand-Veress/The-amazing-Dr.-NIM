@@ -2,6 +2,7 @@ const board_transforms = {scale: 0.15, translateX: -5, translateY: -1};
 const boardGame = document.getElementById("board-game");
 const marbles = [];
 let signal = true;
+let paused = false;
 
 const path_1 = document.querySelector("#path-1 path");
 const path_1_Length = path_1.getTotalLength();

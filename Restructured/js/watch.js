@@ -47,7 +47,7 @@ async function loadGame_watchDrNIM(marbleNum, goal){ // watch Dr. NIM play again
     await delay(2000);
 
     for(let i = 0; i < marbleNum; i++) {   
-        if(signal){
+        if(signal && !paused){
             if(turner.flipped == -1){
                 await delay(1000);
                 turn(turner);

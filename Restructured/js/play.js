@@ -49,7 +49,7 @@ async function loadGame_playDrNIM(marbleNum, goal, playersTurn){ // play against
         else if(signal && turner.flipped == 1)
             playersTurn = false;
            
-        if(playersTurn && signal) {
+        if(playersTurn && signal && !paused) {
             nextTurn = turner.flipped;
 
             const keydownPromise = waitForKey('Enter');
@@ -83,7 +83,7 @@ async function loadGame_playDrNIM(marbleNum, goal, playersTurn){ // play against
                 console.log(error);
             }
         }
-        else if(!playersTurn && signal){
+        else if(!playersTurn && signal && !paused){
             try{
                 signal = false;
                 push_trigger();

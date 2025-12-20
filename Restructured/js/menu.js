@@ -11,29 +11,44 @@ document.addEventListener("DOMContentLoaded", () => {
     const playDrNim = document.getElementById("play-dr-nim-btn");
     const watchDrNim = document.getElementById("watch-dr-nim-btn");
     const pdfViewer = document.getElementById("pdf-viewer");
+    const splitPdf = document.getElementById("split-pdf");
     const closePdf = document.getElementById("close-pdf");
+    const manualBtn = document.getElementById("manualBtn");
 
     if (query.includes('?:')) {
         menuOverlay.style.display = "none";
     } else {
         menuOverlay.style.display = "flex";
     }
-
+    
     originalBtn.addEventListener("click", () => {
         pdfViewer.style.display = "flex";
         const board = document.getElementById("board");
         board.setAttribute("class", "opened-manual");
         menuOverlay.style.display="none";
     });
+    
+    /**
+     * 
+    manualBtn.addEventListener("click", () => {
+        pdfViewer.style.display = "flex";
+    });
+     */
 
+    pdfViewer.style.display = "flex";
+
+    splitPdf.addEventListener('click', () => {
+        board.classList.toggle('split');
+        pdfViewer.classList.toggle('split');
+    });
+    
     closePdf.addEventListener("click", () => {
         pdfViewer.style.display = "none";
         const board = document.getElementById("board");
-        board.setAttribute("class", "closed-manual");
+        board.setAttribute("class", "center");
     });
     
     rulesBtn.addEventListener("click", () => {
-    
         menuOverlay.style.display="none";
         rulesBox.style.display="block";
     });
@@ -45,6 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     pauseBtn.addEventListener("click",()=>{
         menuOverlay.style.display="flex";
+        paused = true;
     });
 
     originalBtn.addEventListener("click", () => {
@@ -58,12 +74,6 @@ document.addEventListener("DOMContentLoaded", () => {
     watchDrNim.addEventListener("click", () => {
         window.location.search = "?:watch";
     });
-  
-
-    pauseBtn.addEventListener("click",()=>{
-        menuOverlay.style.display="flex";
-    });
-
 
 
     const infoBtn = document.getElementById('info-help');
