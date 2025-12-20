@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+    </head>
+
+<body>
+
+<div id="board">
+    <svg id="board-game"
+         viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+
+    <g class="board-piece" id="board-margin">
+        <path 
+            d="M 40.161 586.128 
+            C 39.301 637.392 40.31 627.685 84.578 627.128 
+            L 632.101 627.982 
+            C 687.367 629.794 684.553 626.015 684.205 593.815 
+            L 691.039 157.335 
+            C 690.18 118.702 671.256 99.836 631.247 95.834 
+            L 157.183 21.522 
+            C 76.677 10.204 43.613 64.264 46.141 108.647 
+            L 40.161 586.128 
+            Z">
+        </path>
+    </g>
+
+    <g id="goal-dot">
+        <circle cx="70" cy="600" r="15"/>
+    </g>
+    
+    <g id = "board-background">
+        <path
+            d="M 630.823 139.895 
+            C 472.718 100.045 320.475 73.158 139.198 35.878 
+            C 106.102 29.072 62.17 63.02 65.143 96.678 
+            C 81.124 277.609 85.217 411.396 99.657 558.071 
+            C 102.001 581.881 130.342 606.577 154.26 605.992 
+            C 307.37 602.25 451.04 594.051 600.375 582.27 
+            C 618.197 580.864 634.767 590.202 639.052 540.664 
+            C 648.254 434.28 658.872 374.98 666.3 267.321 
+            C 668.333 237.851 605.742 250.344 580.341 235.262 
+            C 575.555 232.42 572.42 223.164 577.399 220.675 
+            C 592.985 212.882 628.355 218.715 637.711 204.013 
+            C 650.715 183.578 641.755 142.65 630.823 139.895 
+            Z">
+        </path>
+    </g>
+
+    <g class="board-piece" id="edge">
+        <path
+            d="M 638.42 177.597 
+            L 523.805 176.707 
+            C 520.057 176.776 519.802 179.14 524.045 179.163 
+            L 638.587 179.856 
+            C 639.176 179.877 639.309 177.592 638.42 177.597 
+            Z">
+        </path>
+    </g>
+
+    <g class="board-piece" id="biggest-slope">
+        <path
+            d="M 600.9 176.324 
+            L 534.275 182.303 
+            L 267.774 177.178 
+            C 237.376 178.818 238.193 187.016 243.003 215.616 
+            L 285.712 389.012 
+            C 298.485 425.141 325.013 482.985 424.941 492.367 
+            C 337.686 533.437 170.164 507.642 131.107 328.366 
+            L 116.586 121.657 
+            C 111.871 101.092 116.042 83.124 151.607 89.199 
+            L 600.9 176.324 
+            Z">
+        </path>
+    </g>
+
+    <g class="board-piece" id="medium-slope">
+        <path
+            d="M 572.034 260.945 
+            C 580.998 248.58 597.861 254.634 597.734 264.298 
+            L 582.463 427.066 
+            C 580.104 441.604 571.734 448.178 561.604 450.159 
+            C 561.604 450.159 480.644 464.21 499.063 447.754 
+            C 541.113 405.753 501.664 376.19 494.923 364.869 
+            C 489.22 355.29 497.5 353.376 502.91 352.819 
+            C 582.042 344.673 565.188 284.968 572.034 260.945 
+            Z">
+    </g>
+
+    <g class="board-piece" id="small-slope">
+        <path
+            d="M 330.008 362.741 
+            C 369.141 364.543 396.245 355.766 401.109 334.281 
+            C 402.268 327.178 417.312 331.046 417.312 331.098 
+            C 425.09 332.409 428.361 365.673 419.471 366.289 
+            L 329.853 372.921 
+            C 325.013 374.433 321.868 365.285 330.008 362.741 
+            Z">
+        </path>
+    </g>
+
+    <g class="board-piece" id="triangle-slope">
+        <path
+            d="M 360.509 427.792 
+            L 426.948 423.003 
+            C 435.503 422.712 433.697 447.559 433.614 447.579 
+            C 430.837 459.242 342.112 434.457 360.509 427.792 
+            Z">
+        </path>
+    </g>
+
+    <g class="board-piece" id="rectangle-slope">
+        <path
+            d="M 489.423 508 
+            L 594.986 512.612 
+            C 601.402 513.03 602.525 539.536 596.493 539.536 
+            L 490.407 545.53 
+            C 480.096 545.752 481.317 508.084 489.423 508 
+            Z">
+        </path>
+    </g>
+
+    <g class="board-piece">
+        <circle cx="339.62" cy="321.62" r="2.62"/>
+    </g>
+
+    <g class="board-piece">
+        <circle cx="425.834" cy="307.553" r="2.62"/>
+    </g>
+    
+    <g class="board-piece">
+        <circle cx="511.834" cy="292.553" r="2.62"/>
+    </g>
+
+    <g id="left-flip-flop-rotator">
+    <g class="moving-piece" id="left-flip-flop">
+        <path
+            d="M 327.781 256.87 
+            C 336.861 256.234 354.041 252.659 383.251 247.277 
+            C 388.431 246.22 391.561 248.244 384.651 252.335 
+            C 384.651 252.226 362.821 263.106 346.801 272.046 
+            C 334.891 278.169 333.511 287.438 338.951 296.989 
+            C 340.871 300.364 344.561 307.171 354.991 316.874 
+            C 363.861 324.627 349.741 322.08 345.231 319.316 
+            C 333.161 311.888 322.381 296.016 320.281 293.675 
+            C 317.021 290.02 312.881 287.753 305.981 291.408 
+            C 296.831 295.8 281.761 297.011 273.011 293.501 
+            C 265.411 290.189 274.121 288.249 278.071 286.175 
+            L 296.911 277.628 
+            C 300.681 276.126 303.321 273.735 306.851 269.255 
+            C 311.911 262.844 314.221 258.19 327.781 256.87 
+            Z" >
+        </path>
+    </g></g>
+
+    <g id="middle-flip-flop-rotator">
+    <g class="moving-piece" id="middle-flip-flop">
+        <path
+            d="M 412.784 242.87 
+            C 421.859 242.234 439.044 238.659 468.253 233.277 
+            C 473.43 232.22 476.558 234.244 469.648 238.335 
+            C 469.648 238.226 447.819 249.106 431.797 258.046 
+            C 419.891 264.169 418.512 273.438 423.948 282.989 
+            C 425.869 286.364 429.557 293.171 439.995 302.874 
+            C 448.865 310.627 434.741 308.08 430.227 305.316 
+            C 418.156 297.888 407.376 282.016 405.284 279.675 
+            C 402.018 276.02 397.876 273.753 390.98 277.408 
+            C 381.828 281.8 366.759 283.011 358.013 279.501 
+            C 350.411 276.189 359.121 274.249 363.072 272.175 
+            L 381.91 263.628 
+            C 385.683 262.126 388.318 259.735 391.853 255.255 
+            C 396.913 248.844 399.223 244.19 412.784 242.87 
+            Z">
+        </path>
+    </g></g>
+
+    <g id="right-flip-flop-rotator">
+    <g class="moving-piece" id="right-flip-flop">
+        <path
+            d="M 499.765 227.87 
+            C 508.838 227.234 526.018 223.659 555.218 218.277 
+            C 560.394 217.22 563.521 219.244 556.613 223.335 
+            C 556.613 223.226 534.79 234.106 518.773 243.046 
+            C 506.87 249.169 505.492 258.438 510.927 267.989 
+            C 512.846 271.364 516.534 278.171 526.969 287.874 
+            C 535.836 295.627 521.716 293.08 517.203 290.316 
+            C 505.136 282.888 494.359 267.016 492.268 264.675 
+            C 489.003 261.02 484.862 258.753 477.968 262.408 
+            C 468.819 266.8 453.754 268.011 445.011 264.501 
+            C 437.412 261.189 446.119 259.249 450.069 257.175 
+            L 468.901 248.628 
+            C 472.673 247.126 475.306 244.735 478.841 240.255 
+            C 483.899 233.844 486.209 229.19 499.765 227.87 
+            Z">
+        </path>
+    </g></g>
+
+    <g id="equalizer-mover">
+    <g class="moving-piece" id="equalizer">
+        <path
+            d="M 440.061 385.476 
+            C 438.008 382.815 433.068 383.115 435.991 388.189 
+            C 442.275 400.032 486.195 462.716 485.068 362.183 
+            C 484.685 355.098 481.001 359.44 480.298 362.522 
+            C 475.338 376.832 461.655 408.626 440.061 385.476 
+            Z">
+        </path>
+    </g></g>
+
+    <g id="turner-mover">
+    <g class="moving-piece" id="turner">
+        <path
+            d="M 447.566 532.713 
+            C 444.107 541.252 457.384 552.258 463.817 542.691 
+            L 483.061 508.337 
+            C 485.277 503.899 485.394 505.028 490.474 505.058 
+            L 501.307 505.628 
+            C 504.707 506.157 504.597 504.252 502.876 501.209 
+            C 498.199 487.997 497.157 473.365 501.987 462.895 
+            C 503.05 460.407 500.546 459.197 497.744 460.582 
+            C 483.446 467.651 448.005 529.861 447.566 532.713 
+            Z">
+        </path>
+    </g></g>
+
+    <g class="board-hole" id="trigger-hole">
+        <path
+            d="M 609.484 474.435 
+            L 616.804 474.435 
+            L 620.715 552.921 
+            L 608.573 553.301 
+            L 609.484 474.435 
+            Z">
+        </path>
+    </g>
+
+    <g id="trigger-pusher">
+    <g class="moving-piece" id="trigger">
+        <path
+            d="M 615.09 476.232 
+            L 611.752 476.232 
+            L 611.899 512.39 
+            L 610.489 552.691 
+            L 619.938 552.444 
+            L 616.184 512.452 
+            L 615.09 476.232 
+            Z">
+        </path>
+    </g></g>
+
+    <g class="board-hole" id="pusher-hole">
+        <path
+            d="M 614.195 140.151 
+            L 620.539 140.785 
+            L 621.174 172.506 
+            L 614.512 172.506 
+            L 614.195 140.151 
+            Z">
+        </path>
+    </g>
+    
+    <g id="pusher-trigger">
+    <g class="moving-piece" id="pusher">
+        <path
+            d="M 616.115 146.548 
+            L 619.47 146.57 
+            L 618.829 154.508 
+            L 618.928 160.258 
+            L 619.626 167.756 
+            L 615.743 167.778 
+            L 616.459 160.375 
+            L 616.54 154.368 
+            L 616.115 146.548 
+            Z">
+        </path>
+    </g></g>
+
+    <g class="letter" id="D">
+        <path
+            d="M 140.626 98.635 
+            L 186.888 107.458 
+            C 217.523 118.688 205.241 163.426 186.173 165.882 
+            L 145.395 164.689 
+            L 140.626 98.635 
+            Z">
+        </path>
+    </g>
+    <!-- Outside D and inside of letter D-->
+    <g class="board-piece" id="d">
+        <path
+            d="M 155.119 113.346 
+            L 182.568 118.686 
+            C 187.891 119.96 189.218 122.11 190.02 126.263 
+            L 191.883 143.527 
+            C 192.223 148.872 186.009 153.049 181.698 152.718 
+            L 157.603 152.221 
+            L 155.119 113.346 
+            Z">
+        </path>
+    </g>
+
+    <g class="letter" id="r">
+        <path
+            d="M 227.292 133.625 
+            L 227.402 129.111 
+            L 218.484 129.331 
+            L 220.796 165.444 
+            L 228.943 165.004 
+            C 224.222 132.505 242.651 140.064 254.486 147.057 
+            L 254.817 137.919 
+            C 247.397 133.46 237.578 127.219 227.292 133.625 
+            Z">
+        </path>
+    </g>
+
+    <g class="letter" id="punkt">
+        <circle cx="261.689" cy="160.318" r="6.471"/>
+    </g>
+
+    <g class="letter" id="N">
+        <path
+            d="M 292.209 166.817 
+            L 289.937 123.87 
+            L 303.565 125.522 
+            L 328.135 152.364 
+            L 326.896 131.716 
+            L 338.252 131.51 
+            L 340.936 167.643 
+            L 326.07 167.23 
+            L 302.739 143.072 
+            L 304.184 166.403 
+            L 292.209 166.817 
+            Z">
+        </path>
+    </g>
+
+    <g class="letter" id="I">
+        <path
+            d="M 351.831 134.741 
+            L 361.768 135.376 
+            L 364.517 167.937 
+            L 354.368 168.571 
+            L 351.831 134.741 
+            Z">
+        </path>
+    </g>
+
+    <g class="letter" id="M">
+        <path
+            d="M 374.65 169.971 
+            L 385.263 169.546 
+            L 384.627 154.262 
+            L 402.882 168.697 
+            L 417.53 157.659 
+            L 419.865 170.395 
+            L 430.478 170.183 
+            L 428.992 150.654 
+            L 415.194 146.833 
+            L 402.67 154.687 
+            L 389.084 142.375 
+            L 372.314 139.191 
+            L 374.65 169.971 
+            Z">
+        </path>
+    </g>
+
+    <g class="paths" id="path-1">
+        <path
+        d="M 619 162 
+        L 617.288 195.072 
+        L 362.899 233.898 
+        L 310.468 243.608 
+        L 281.34 265.94 
+        C 281.34 265.94 288.136 323.226 287.165 323.226 
+        C 286.194 323.226 301.73 384.395 301.73 384.395 
+        C 319.221 440.419 376.878 472.195 417.273 474.694 
+        C 442.451 475.546 468.58 467.356 457.082 484.403 
+        L 404 580">
+        </path>
+    </g>
+
+    <g class="paths" id="path-2">
+        <path
+            d="M 619 162 
+            L 617.547 193.929 
+            L 453.088 219.029 
+            L 397.584 227.501 
+            C 371.364 231.862 371.571 231.408 372.518 249.824 
+            C 377.072 338.409 377.403 338.578 377.403 338.578 
+            C 377.403 338.578 342.266 344.569 327.618 346.309 
+            C 312.97 348.049 296.33 362.176 301.989 383.252 
+            C 319.48 439.276 377.137 471.052 417.532 473.551 
+            C 442.71 474.403 468.839 466.213 457.341 483.26 
+            L 404 580">
+        </path>
+    </g>
+
+    <g class="paths" id="path-3">
+        <path
+            d="M 619 162 
+            L 617.547 194.929 
+            L 548.258 203.973 
+            L 481.077 217.408 
+            C 454.857 221.769 453.604 219.855 454.551 238.271 
+            C 459.105 326.856 454.765 376.07 454.765 376.07 
+            C 454.765 376.07 417.877 407.167 403.229 408.907 
+            C 388.581 410.647 328.443 403.463 334.102 424.539 
+            C 337.289 444.655 372.453 469.641 417.532 474.551 
+            C 443.98 477.431 466.795 465.169 457.341 484.26 
+            L 404 580">
+        </path>
+    </g>
+
+    <g class="paths" id="path-4">
+        <path
+            d="M 619 162 
+            L 617.547 194.929 
+            L 548.258 203.973 
+            L 481.077 217.408 
+            C 454.857 221.769 453.604 219.855 454.551 238.271 
+            C 459.105 326.856 455.293 357.582 455.293 357.582 
+            C 455.293 357.582 477.566 372.305 487.744 384.609 
+            C 497.922 396.913 506.453 410.858 492.568 430.878 
+            C 474.089 464.754 466.795 465.169 457.341 484.26 
+            L 404 580">
+        </path>
+    </g>
+
+    <g class="paths" id="path-5">
+        <path
+            d="M 619 162 
+            L 617.547 194.929 
+            L 548.258 203.973 
+            L 481.077 217.408 
+            C 454.857 221.769 453.604 219.855 454.551 238.271 
+            C 459.105 326.856 455.293 357.582 455.293 357.582 
+            C 455.293 357.582 477.566 372.305 487.744 384.609 
+            C 497.922 396.913 506.453 418.728 492.568 430.878 
+            C 464.132 456.289 462.287 457.387 476.009 462.65 
+            C 496.01 470.321 482.063 483.969 512.217 489.968 
+            C 540.663 495.627 566.978 496.7 591.165 496.62 
+            C 619.785 496.525 616.775 513.077 618.984 538.485 
+            C 621.895 571.962 585.874 565.18 585 569">
+        </path>
+    </g>
+
+    <g class="paths" id="path-6">
+        <path
+            d="M 619 162 
+            L 617.547 194.929 
+            L 568.555 206.873 
+            C 533.629 216.422 546.427 255.128 547.769 271.258 
+            C 548.908 284.952 556.916 336.001 490.589 339.344 
+            C 442.506 341.768 455.293 357.582 455.293 357.582 
+            C 455.293 357.582 477.566 372.305 487.744 384.609 
+            C 497.922 396.913 506.453 418.728 492.568 430.878 
+            C 464.132 456.289 462.287 457.387 476.009 462.65 
+            C 496.01 470.321 482.063 483.969 512.217 489.968 
+            C 540.663 495.627 566.978 496.7 591.165 496.62 
+            C 619.785 496.525 616.775 513.077 618.984 538.485 
+            C 621.895 571.962 585.874 565.18 585 569">
+        </path>
+    </g>
+
+    <g class="paths" id="path-7">
+        <path
+            d="M 619 162 
+            L 617.547 194.929 
+            L 568.555 206.873 
+            C 533.629 216.422 546.427 255.128 547.769 271.258 
+            C 548.908 284.952 556.916 336.001 490.589 339.344 
+            C 442.506 341.768 455.293 357.582 455.293 357.582 
+            C 455.293 357.582 477.566 372.305 487.744 384.609 
+            C 497.922 396.913 505.794 413.505 493.811 431.292 
+            C 486.883 441.576 476.621 455.472 471.038 464.721 
+            C 460.036 482.949 460.108 483.141 445.111 509.023 
+            C 415.088 556.75 403.473 578.734 404 580">
+        </path>
+    </g>
+
+    <g class="paths" id="path-8">
+        <path
+            d="M 619 162 
+            L 617.547 194.929 
+            L 568.97 207.287 
+            C 537.903 219.162 542.798 239.638 549.425 271.258 
+            C 553.03 328.64 513.405 338.681 490.589 338.929 
+            C 434.225 339.542 454.765 376.07 454.765 376.07 
+            C 454.765 376.07 417.877 407.167 403.229 408.907 
+            C 388.581 410.647 328.443 403.463 334.102 424.539 
+            C 337.289 444.655 372.453 469.641 417.532 474.551 
+            C 443.98 477.431 466.795 465.169 457.341 484.26 
+            L 404 580">
+        </path>
+    </g>
+
+    <g class="paths" id="start-path">
+        <path
+            d="M 158 74 L 565 154 L 619 162">
+        </path>
+    </g>
+
+    <g class="paths" id="end-path">
+        <path
+            d="M 585 569 L 404 580 L 158 590 C 141.817 589.406 131.666 579.784 125 573">
+        </path>
+    </g>
+    
+    <g id="info-help">
+        <svg x="87.5" y="2.5" width="10" height="10" viewBox="0 0 24 24" id="info-icon" style="cursor: pointer;">
+        <circle cx="12" cy="12" r="9" stroke-width="1"/>
+        <path d="M12 11V17" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M11.75 8V7H12.25V8H11.75Z" stroke-width="1.5"/>
+        </svg>
+    </g>
+
+
+    <defs>
+        <radialGradient id="marbleGradient" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#ffffff" />
+            <stop offset="10%" stop-color="#fe9000" />
+            <stop offset="80%" stop-color="#ffcc00" />
+            <stop offset="95%" stop-color="#ffffff" />
+        </radialGradient>
+    </defs>
+
+    </svg>
+
+    <svg id="tutorial-svg" class="hidden"
+         viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+    
+    <g class="tutorial" id="text-trigger">
+        <title>Text-trigger</title>
+        <polyline style="fill: none; stroke: rgba(112, 0, 0, 0.8);" stroke-width="2" 
+            points="615 545 690.784 458.719 734.235 458.896"/>
+    
+        <rect x="725" y="432.587" width="174.501" height="60" stroke-width="1.5"
+            style="fill: rgb(238, 240, 227); stroke: rgba(112, 0, 0, 0.8);"/>
+
+        <text style="fill: rgba(112, 0, 0, 0.8); font-family: Arial, sans-serif; font-size: 15px; text-anchor: middle;">
+            <tspan x="812.5" y="452">Push trigger to release</tspan>
+            <tspan x="812.5" dy="1.1em">the next marble</tspan>
+            <tspan x="812.5" dy="1.2em" style="font-size: 14px;">(Cursor click or Enter)</tspan>
+        </text>
+    </g>
+
+    <g class="tutorial" id="text-turner">
+        <title>Text-turner</title>
+        <polyline style="fill: none; stroke: rgba(112, 0, 0, 0.8);" stroke-width="2" 
+            points="458.82 535.578 526.408 673.965 606.363 673.626"/>
+    
+        <rect x="601.462" y="644.974" width="199.05" height="60" stroke-width="1.5"
+            style="fill: rgb(238, 240, 227); stroke: rgba(112, 0, 0, 0.8);"/>
+
+        <text style="fill: rgba(112, 0, 0, 0.8); font-family: Arial, sans-serif; font-size: 15px; text-anchor: middle;">
+            <tspan x="701" y="663">Switch turner to the left</tspan>
+            <tspan x="701" dy="1.1em">to end your turn</tspan>
+            <tspan x="701" dy="1.2em" style="font-size: 14px;">(Cursor click or Space Bar)</tspan>
+        </text>
+    </g>
+
+    <g class="tutorial" id="text-equalizer">
+        <title>text-equalizer</title>
+        <polyline style="fill: none; stroke: rgba(112, 0, 0, 0.8);" stroke-width="2" 
+            points="460.814 402.139 625.303 272.263 727.872 272.44"/>
+    
+        <rect x="718.914" y="246.131" width="174.501" height="97.517" stroke-width="1.5"
+            style="fill: rgb(238, 240, 227); stroke: rgba(112, 0, 0, 0.8);"/>
+
+        <text style="fill: rgba(112, 0, 0, 0.8); font-family: Arial, sans-serif; font-size: 15px; text-anchor: middle;">
+            <tspan x="806.16" y="268">Equalizer piece:</tspan>
+            <tspan x="806.16" dy="1.1em">positioned at start</tspan>
+            <tspan x="806.16" dy="1.1em">for configuration</tspan>
+            <tspan x="806.16" dy="1.2em" style="font-size: 15px;">(*Original: Cursor click)</tspan>
+            <tspan x="806.16" dy="1.1em">{ Consult the manual }</tspan>
+        </text>
+    </g>
+
+    <g class="tutorial" id="text-levers">
+        <title>Text-levers</title>
+        <path style="fill: none; stroke: rgba(112, 0, 0, 0.8);" stroke-width="2" 
+            d="M 321.823 274.122 L 220.086 31.874 L 204.878 -18.592 L 308.722 44.956 L 494.449 247.387"/>
+        <polyline style="fill: none; stroke: rgba(112, 0, 0, 0.8);" stroke-width="2" 
+            points="408.448 261.098 252.844 37.679 204.281 -18.472"/>
+    
+        <rect x="120.926" y="-80.27" width="342.996" height="58.544" stroke-width="1.5"
+            style="fill: rgb(238, 240, 227); stroke: rgba(112, 0, 0, 0.8);"/>
+
+        <text style="fill: rgba(112, 0, 0, 0.8); font-family: Arial, sans-serif; font-size: 15px; text-anchor: middle;">
+            <tspan x="292.42" y="-58">Flip-flop levers: positioned at start configuration</tspan>
+            <tspan x="292.42" dy="1.2em">(*Original: Cursor click) { Consult the manual }</tspan>
+        </text>
+    </g>
+
+    <g class="tutorial" id="text-goal">
+        <title>Text-Goal</title>
+        <polyline style="fill: none; stroke: rgba(112, 0, 0, 0.8);" stroke-width="2" 
+            points="68.97 598.261 28.061 599.367 0.42 645.803"/>
+    
+        <rect x="-40.497" y="641.381" width="266.032" height="44.849" stroke-width="1.5"
+            style="fill: rgb(238, 240, 227); stroke: rgba(112, 0, 0, 0.8);"/>
+
+        <text style="fill: rgba(112, 0, 0, 0.8); font-family: Arial, sans-serif; font-size: 15px; text-anchor: middle;">
+            <tspan x="92.52" y="662">Goal: Whoever takes the last marble</tspan>
+            <tspan x="92.52" dy="1.2em">wins (green) / looses (red)</tspan>
+        </text>
+    </g>
+    </svg>
+</div>
+
+
+
+<!-- Start - Main menu && Pause button -->
+<button id="pauseBtn">
+    <span></span>
+    <span></span>
+</button>
+
+<div id="menu-overlay">
+  <div id="menu-box">
+    <h1>Dr. Nim</h1>
+    <button id="original-btn">Original Dr. NIM</button>
+    <button id="play-dr-nim-btn">Play against Dr. NIM</button>
+    <button id="watch-dr-nim-btn">Dr. NIM vs DR. NIM </button>
+    <button id="rules-btn">Rules</button>
+  </div>
+</div>  
+
+<div id="pdf-viewer">
+  <div id="pdf-header">
+    <span>Manual</span>
+    <button id="close-pdf">✖</button>
+  </div>
+
+<iframe id="pdf-frame" allow="fullscreen"
+        src="https://www.cs.miami.edu/home/burt/learning/Csc427.152/491_Dr-Nim-Manual5b15d.pdf#toolbar=1&navpanes=0&zoom=page-width">
+</iframe>
+
+
+</div>
+
+
+
+<div id="rules">    
+    <h1>Dr. Nim – Game Rules</h1>
+    <p>
+        1.The game starts with a certain number of marbles (for example, 15).<br>
+        2.On each turn, you or Dr. Nim can take <b>1, 2, or 3</b> marbles from the pile.<br>
+        3.Players take turns removing marbles.<br>
+        4.Depending on the goal the player who takes the <b>last marble</b> either <b>wins</b> / <b>looses</b> the game.<br>
+        <br>
+        <b>Tip:</b><br>
+        Try to find a pattern in how Dr. Nim plays.<br>
+        If you can predict his moves, you might discover the secret to always winning!<br>
+        <br>
+        <button id="close-rules">Close Rules</button>
+    </p>
+</div>
+
+<img src="illustrations/top-left.png" class="corner-image top-left">
+<img src="illustrations/top-right.png" class="corner-image top-right">
+<img src="illustrations/bottom-left.png" class="corner-image bottom-left">
+<img src="illustrations/bottom-right.png" class="corner-image bottom-right">
+
+<!-- END - Main menu && Pause button -->
+
+<script src="js/game-logics.js"></script>
+<script src="js/menu.js"></script>
+<script>
+    const query = window.location.search;
+    const pageName = query.includes('?:') ? query.replace('?:', '') : 'start';
+
+    const script = document.createElement('script');
+    script.src = `js/${pageName}.js`;
+    document.body.appendChild(script);
+</script>
+
+</body>
+
+</html>

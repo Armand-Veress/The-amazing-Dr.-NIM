@@ -1,0 +1,389 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+
+    background-color: rgb(238, 240, 227);
+}
+body{
+  z-index: -10;
+}
+
+#board-game {
+    position: absolute;
+    z-index: 1;
+}
+#board {
+    position: absolute;
+    z-index: 0;
+    /* 500x475 px  +- % */
+    width: 500px;
+    height: 475px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color:rgba(0, 0, 0, 0);
+}
+
+
+#board.opened-manual {
+    transform: translate(-4%, -50%);
+}
+#board.closed-manual {
+    transform: translate(-50%, -50%);
+}
+
+#info-help {
+    fill: rgba(238, 240, 227, 1);
+    stroke: rgba(112, 0, 0, 0.5);
+}
+
+#goal-dot {
+    transform: translate(-5px, -1px) scale(0.15);
+
+    fill: #bc0000;
+    stroke: #700000;
+    stroke-width: 2px;
+}
+
+#board-game .moving-piece {
+    transform: translate(-5px, -1px) scale(0.15);
+
+    fill:#FAEBD7;
+    stroke:#700000;
+    stroke-width: 2px;
+}
+#board-game .board-piece {
+    transform: translate(-5px, -1px) scale(0.15);
+
+    fill: #ff0000; 
+    stroke: #700000;
+    stroke-width: 2px;
+}
+
+#board-game #edge {
+    stroke-width: 1.5px;
+}
+
+#board-game .letter {
+    transform: translate(-5px, -1px) scale(0.15);
+
+    fill: #FAEBD7; 
+    stroke: #700000;
+    stroke-width: 2px;
+}
+#board-game .board-hole{
+    transform: translate(-5px, -1px) scale(0.15);
+
+    fill: #503030;
+    stroke: #700000;
+    stroke-width: 1px;
+}
+
+
+#board-game .marble {
+    transform: translate(-5px, -1px) scale(0.15);
+
+    fill: url(#marbleGradient);
+    stroke:#700000;
+    stroke-width: 2px;
+}
+
+
+#board-game .paths {
+    transform: translate(-5px, -1px) scale(0.15);
+
+    fill: none;
+}
+
+#board-background{
+    transform: translate(-5px, -1px) scale(0.15);
+
+    fill:#bc0000;
+    stroke:#700000;
+    stroke-width: 2px;
+}
+
+#trigger {
+    fill: #FAEBD7;
+    stroke: #700000;
+    stroke-width: 0.5px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+#trigger-pusher {
+    transition: transform 0.1s ease;
+    transform-origin: center;
+    transform-box: fill-box;
+}
+#pusher {
+    fill: #FAEBD7;
+    stroke: #700000;
+    stroke-width: 0.5px;
+    cursor: pointer;
+    transition: all 0.1s ease;
+}
+
+#pusher-trigger {
+    transition: transform 0.1s ease;
+    transform-origin: center;
+    transform-box: fill-box;
+}
+
+#tutorial-svg {
+    position: absolute;
+    z-index: 2;
+    overflow: visible;
+    pointer-events: none;
+}
+#tutorial-svg .tutorial{
+    transform: translate(-5px, -1px) scale(0.15);
+}
+
+.hidden {
+  display: none;
+}
+
+.overlay-svg {
+  position: absolute;
+}
+
+
+/* Menu & rules & design*/
+#menu-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    z-index: 1000;
+    background: transparent; 
+}
+
+#menu-box {
+  background: rgb(238, 240, 227,0.95);
+  border-radius: 20px;
+  padding: 40px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
+#menu-box h1 {
+    margin-bottom: 20px;
+    font-size: 2em;
+    color: black;
+	text-shadow: 2px 2px 4px rgba(0,0,0,0.3); 
+}
+
+#menu-box button {
+    display: block;
+    width: 200px;
+    margin: 10px auto;
+    padding: 10px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 10px;
+    background-color: #fe9000;
+    color: black;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+	text-shadow: 2px 2px 4px rgba(0,0,0,0.3); 
+}
+
+#menu-box button:hover {
+    background-color: #9f6012;
+}
+
+/* #rules-overlay{
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content:center;
+	align-items:center;
+	z-index:1000;
+}  */
+
+#rules{
+	background : rgba(250, 235, 215,0.95);
+	padding: 30px;
+	border-radius: 15px;
+	text-align: center;
+  height: 70%;
+  max-height: 80%;
+	max-width: 30%;
+	box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+
+  position: absolute;
+  z-index:  3;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  display: none;
+} 
+
+#rules button{
+	display: block;
+  width: 200px;
+  margin: 10px auto;
+  padding: 10px;
+  font-size: 1.2em;
+  border: none;
+  border-radius: 10px;
+  background-color: #fe9000;
+  color: black;
+  cursor: pointer;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3); 
+  transition: color 0.3s ease;    
+}
+
+#rules button:hover {
+  background-color: #9f6012;
+}
+
+#rules h1 {
+  margin-bottom: 18px;
+  font-size: 2em;
+  color: black;
+	text-shadow: 2px 2px 4px rgba(0,0,0,0.3); 
+  transition: color 0.3s ease;    
+}
+
+#rules p{
+	color: black;
+	font-size: 16px;         
+  font-family: Arial, sans-serif; 
+  line-height: 1.6;         /* spațiu între rânduri */
+  text-align: justify;      /* aliniază textul pe ambele margini */
+  margin: 10px 0;           /* spațiu exterior sus și jos */
+  padding: 10px;
+	text-shadow: 2px 2px 4px rgba(0,0,0,0.3); 
+  transition: color 0.3s ease;    
+}
+
+#pauseBtn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 50px;             
+  height: 50px;
+  background-color: #FE9000; 
+  border: none;
+  border-radius: 10px;      
+  cursor: pointer;
+  display: flex;
+  justify-content: space-around; /* spațiu între cele două linii */
+  align-items: center;
+  padding: 0 10px;
+  z-index: 1000;
+	transition: all 0.3s ease;
+}
+
+/* Două linii verticale albe */
+#pauseBtn span {
+  display: block;
+  width: 8px;          /* grosimea liniei */
+  height: 70%;         /* lungimea liniei în interiorul butonului */
+  background-color: white;
+  border-radius: 2px;  /* linii ușor rotunjite */
+	transition: all 0.3s ease;
+}
+
+#pauseBtn:hover {
+  background-color: #9f6012; /* portocaliu mai deschis */
+  transform: scale(1.1);     /* butonul crește ușor */
+}
+
+/* CONTAINER PDF */
+#pdf-viewer {
+  position: fixed;
+  left: 10 px;                    /* nu lipit de marginea dreaptă */
+  top: 50%;                       /* centrare verticală */
+  transform: translateY(-50%);    
+  width: 45%;
+  height: 95%;                    /* mai mic ca să rămână spațiu sus/jos */
+  background: rgba(255, 255, 255, 0.97);
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.25);
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 999;
+}
+
+/* HEADER PDF */
+#pdf-header {
+  background: #fe9000;
+  padding: 10px 15px;
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#close-pdf {
+  background: #ff0000;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+#close-pdf:hover {
+  background: #700000;
+}
+
+/* IFRAME PDF */
+#pdf-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.corner-image {
+  position: absolute;
+  z-index: -2;       
+  width: auto;
+  height: 45%;
+  pointer-events: none; 
+}
+
+.top-left {
+  z-index: -1;
+  top: 10px;
+  left: 140px;
+  height: 55%;
+}
+
+.top-right {
+  z-index: -1;
+  top: 10px;
+  right: 10px;
+}
+
+.bottom-left {
+  bottom: 10px;
+  left: 10px;
+  height: 50%;
+}
+
+.bottom-right {
+  bottom: 10px;
+  right: 50px;
+
+  height: 70%;
+}
+
