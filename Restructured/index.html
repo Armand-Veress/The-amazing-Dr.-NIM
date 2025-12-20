@@ -602,7 +602,7 @@
 
         <text style="fill: rgba(112, 0, 0, 0.8); font-family: Arial, sans-serif; font-size: 15px; text-anchor: middle;">
             <tspan x="92.52" y="662">Goal: Whoever takes the last marble</tspan>
-            <tspan x="92.52" dy="1.2em">wins (green) / looses (red)</tspan>
+            <tspan x="92.52" dy="1.2em">wins (green) / loses (red)</tspan>
         </text>
     </g>
     </svg>
@@ -662,7 +662,7 @@
         1.The game starts with a certain number of marbles (for example, 15).<br>
         2.On each turn, you or Dr. Nim can take <b>1, 2, or 3</b> marbles from the pile.<br>
         3.Players take turns removing marbles.<br>
-        4.Depending on the goal the player who takes the <b>last marble</b> either <b>wins</b> / <b>looses</b> the game.<br>
+        4.Depending on the goal the player who takes the <b>last marble</b> either <b>wins</b> / <b>loses</b> the game.<br>
         <br>
         <b>Tip:</b><br>
         Try to find a pattern in how Dr. Nim plays.<br>
@@ -678,6 +678,38 @@
 <img src="illustrations/bottom-right.png" class="corner-image bottom-right">
 
 <!-- END - Main menu && Pause button -->
+
+<div id="configurations-menu">
+  <div id="submenu-box">
+    <h1>Configurations: </h1>
+    <div id="marble-bar">
+        <label>Number of marbles: <span id="marbleNum">12</span></label><br>
+        <input type="range" id="bar" min="8" max="15" value="12">
+    </div>
+    <div class="choice-row">
+        <p>Goal (Whoever takes the last marble):</p>
+        <label><input type="radio" name="goal" value="wins" checked> Wins</label>
+        <label><input type="radio" name="goal" value="looses"> Looses</label>
+    </div>
+
+    <div class="choice-row" id="turn-choice">
+        <p>First turn (Who gets to start):</p>
+        <label><input type="radio" name="turn" value="true" checked> You</label>
+        <label><input type="radio" name="turn" value="false"> Dr. NIM</label>
+    </div>
+
+    <div class="choice-row" id="impossible-choice">
+        <p>Configuration (Difficulty level):</p>
+        <label><input type="radio" name="impossible" value="false" checked> Normal</label>
+        <label><input type="radio" name="impossible" value="true"> Impossible</label>
+    </div>
+    <br>
+    <button id="confirm">Confirm</button>
+  </div>
+</div> 
+
+<!-- END - Configurations submenu -->
+
 
 <script src="js/game-logics.js"></script>
 <script src="js/menu.js"></script>

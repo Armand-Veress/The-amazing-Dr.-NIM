@@ -1,4 +1,19 @@
-async function loadGame_playDrNIM(marbleNum, goal, playersTurn){ // play against Dr. NIM
+const rawData = localStorage.getItem('Parameters');
+
+if (rawData) {
+    const param = JSON.parse(rawData);
+
+    const marbleNum = param.marbles;
+    const goal = param.goal;
+    const playersTurn = param.turn;
+    const impossible = param.impossible;
+    
+    loadGame_playDrNIM(marbleNum, goal, playersTurn, impossible); 
+} else {
+    console.log("Missing configuration parameters...");
+}
+
+async function loadGame_playDrNIM(marbleNum, goal, playersTurn, impossible){ // play against Dr. NIM
     await removeAllMarbles();
     determineGoal(goal);
     configure_DrNIM(marbleNum, goal, playersTurn); 
@@ -84,6 +99,7 @@ async function loadGame_playDrNIM(marbleNum, goal, playersTurn){ // play against
             }
         }
         else if(!playersTurn && signal && !paused){
+            await delay(1000);
             try{
                 signal = false;
                 push_trigger();
@@ -128,5 +144,3 @@ async function loadGame_playDrNIM(marbleNum, goal, playersTurn){ // play against
             alert("Game ended: Dr. NIM wins!");
     }
 }
-
-loadGame_playDrNIM(15, 1, true); 

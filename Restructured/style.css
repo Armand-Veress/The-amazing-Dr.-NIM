@@ -160,7 +160,7 @@ body{
 }
 
 #menu-box {
-  background: rgb(238, 240, 227,0.95);
+  background: rgba(250, 235, 215,0.95);
   border-radius: 20px;
   padding: 40px;
   width: 300px;
@@ -420,3 +420,100 @@ body{
   height: 70%;
 }
 
+
+/* Configurations submenu*/
+
+#configurations-menu {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    z-index: 1000;
+    background: transparent; 
+    display: none;
+}
+
+#submenu-box {
+  background: rgba(250, 235, 215,0.95);
+  border-radius: 20px;
+  padding: 40px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
+#submenu-box h1 {
+    margin-bottom: 20px;
+    font-size: 2em;
+    color: black;
+	text-shadow: 2px 2px 4px rgba(0,0,0,0.3); 
+}
+
+#submenu-box button {
+    display: block;
+    width: 200px;
+    margin: 10px auto;
+    padding: 10px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 10px;
+    background-color: #fe9000;
+    color: black;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+	text-shadow: 2px 2px 4px rgba(0,0,0,0.3); 
+}
+
+#submenu-box button:hover {
+    background-color: #9f6012;
+}
+
+#marble-bar {
+    margin-top: 20px;
+    color: black;
+}
+
+/* Bara orizontală: subțire și discretă */
+#bar {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 80%;
+    height: 2px;  
+    background: rgba(135, 50, 0, 0.7); 
+    outline: none;
+    margin: 20px 0;
+    color:rgb(255, 80, 0)
+}
+
+#bar::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: #fe9000;
+    width: 3px;
+    height: 15px;
+    border-radius: 2px;
+}
+
+#bar::-moz-range-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    background: #fe9000;
+    width: 3px;
+    height: 15px;
+    border-radius: 2px;
+}
+
+#submenu-box input[type="radio"] {
+    accent-color: #d27700;
+    cursor: pointer;
+    transform: scale(1.2); 
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.choice-row {
+    margin: 15px 0;
+    font-size: 1.1em;
+}

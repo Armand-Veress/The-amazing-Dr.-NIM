@@ -1,3 +1,16 @@
+const rawData = localStorage.getItem('Parameters');
+
+if (rawData) {
+    const param = JSON.parse(rawData);
+
+    const marbleNum = param.marbles;
+    const goal = param.goal;
+    
+    loadGame_watchDrNIM(marbleNum, goal);
+} else {
+    console.log("Missing configuration parameters...");
+}
+
 async function loadGame_watchDrNIM(marbleNum, goal){ // watch Dr. NIM play against himself
     await removeAllMarbles();
     determineGoal(goal);
@@ -98,5 +111,3 @@ async function loadGame_watchDrNIM(marbleNum, goal){ // watch Dr. NIM play again
             alert("Game ended: Dr. NIM 2 wins!");
     }
 }
-
-loadGame_watchDrNIM(15, -1);

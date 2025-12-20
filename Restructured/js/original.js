@@ -1,3 +1,5 @@
+loadGame_originalDrNIM(15);
+
 async function loadGame_originalDrNIM(marbleNum){ // just as the original physical model of Dr. NIM
     await removeAllMarbles();
     determineGoal(0);
@@ -77,6 +79,3 @@ async function loadGame_originalDrNIM(marbleNum){ // just as the original physic
         }
     }
 }
-
-
-loadGame_originalDrNIM(15);
