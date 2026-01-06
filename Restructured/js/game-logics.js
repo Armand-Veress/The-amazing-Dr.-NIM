@@ -1005,7 +1005,7 @@ function lock_pieces(){
     document.getElementById(left_flip_flop.element_id).removeEventListener("click", leftFlipFlopListener);
 }
 
-function configure_DrNIM(marbleNum, goal, playersTurn){
+function configure_DrNIM(marbleNum, goal, playersTurn, impossible=false){
     
     if(goal == 1){ // Last marble wins
         if(marbleNum % 4 == 0){
@@ -1100,6 +1100,9 @@ function configure_DrNIM(marbleNum, goal, playersTurn){
         if(turner.flipped == -1)
             turn(turner);
     }
+
+    if(impossible == true)
+        turn(equalizer);
 }
 
 function determineGoal(goal){

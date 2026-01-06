@@ -16,7 +16,7 @@ if (rawData) {
 async function loadGame_playDrNIM(marbleNum, goal, playersTurn, impossible){ // play against Dr. NIM
     await removeAllMarbles();
     determineGoal(goal);
-    configure_DrNIM(marbleNum, goal, playersTurn); 
+    configure_DrNIM(marbleNum, goal, playersTurn, impossible); 
 
     for (let i = 0; i < marbleNum; i++) { 
         const rotatorId = `marble-${i}-roller`;
@@ -58,6 +58,12 @@ async function loadGame_playDrNIM(marbleNum, goal, playersTurn, impossible){ // 
     
     let lastTurn;
 
+    if(impossible == true){
+        window.addEventListener("keydown", equalListener);
+        document.getElementById(equalizer.element_id).addEventListener("click", equalizerListener);
+    }
+
+    let marblesRolled = 0;
     for(let i = 0; i < marbleNum; i++) {
         if(signal && turner.flipped == -1)
             playersTurn = true;
@@ -77,8 +83,26 @@ async function loadGame_playDrNIM(marbleNum, goal, playersTurn, impossible){ // 
                 tagPromise(nextTurnPromise, 'turnerClick')
             ]);
 
+            window.removeEventListener("keydown", equalListener);
+            document.getElementById(equalizer.element_id).removeEventListener("click", equalizerListener);
+
+            if(solved.source == 'keydown' || solved.source == 'mousedown'){
+                if(marblesRolled == 3){
+                    alert("You can only roll up to 3 marbles per turn! Switch the turner-lever to end your turn.");
+                    i = i-1;
+                    continue;
+                }
+            }
+
             if(solved.source == 'turnerClick'){
+                if(marblesRolled == 0){
+                    alert("You must roll at least one marble before switching turns!");
+                    i = i-1;
+                    continue;
+                }
+
                 turn(turner);
+                marblesRolled = -1;
                 await delay(400);
             }
 
@@ -93,6 +117,7 @@ async function loadGame_playDrNIM(marbleNum, goal, playersTurn, impossible){ // 
                 advanceSlots(marbleNum, i + 1);
 
                 lastTurn = playersTurn;
+                marblesRolled += 1;
             }
             catch(error){
                 console.log(error);

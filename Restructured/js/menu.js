@@ -159,6 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
        
     closePdf.addEventListener("click", () => {
         pdfViewer.style.display = "none";
+        pdfViewer.setAttribute("class", "center");
         board.setAttribute("class", "center");
         paused = false;
     });
