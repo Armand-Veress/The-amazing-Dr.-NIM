@@ -517,3 +517,52 @@ body{
     margin: 15px 0;
     font-size: 1.1em;
 }
+
+
+/* Menu pause */
+#menu-overlay-pause {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    justify-content: center; 
+    align-items: center;     
+    z-index: 1000;
+    background: transparent; 
+}
+
+#menu-box-pause {
+  background: rgba(250, 235, 215,0.95);
+  border-radius: 20px;
+  padding: 40px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+}
+
+#menu-box-pause h1 {
+    margin-bottom: 20px;
+    font-size: 2em;
+    color: black;
+	text-shadow: 2px 2px 4px rgba(0,0,0,0.3); 
+}
+
+#menu-box-pause button {
+    display: block;
+    width: 200px;
+    margin: 10px auto;
+    padding: 10px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 10px;
+    background-color: #fe9000;
+    color: black;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+	text-shadow: 2px 2px 4px rgba(0,0,0,0.3); 
+}
+
+#menu-box-pause button:hover {
+    background-color: #9f6012;
+}

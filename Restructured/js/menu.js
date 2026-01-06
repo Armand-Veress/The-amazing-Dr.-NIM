@@ -121,24 +121,36 @@ document.addEventListener("DOMContentLoaded", () => {
   
     const board = document.getElementById("board");
     const pauseBtn=document.getElementById("pauseBtn");
-    const newGameBtn = document.getElementById("newGameBtn");
-    const continueBtn = document.getElementById("continueBtn")
-    const manualBtn = document.getElementById("manualBtn");
+    const menuOverlayPause=document.getElementById("menu-overlay-pause");
+    const newGameBtn = document.getElementById("new-game");
+    const continueBtn = document.getElementById("continue")
+    const manualBtn = document.getElementById("manual");
     const splitPdf = document.getElementById("split-pdf");
     const closePdf = document.getElementById("close-pdf");
        
     pauseBtn.addEventListener("click",()=>{
-        menuOverlay.style.display="flex";
+        menuOverlayPause.style.display="flex";
         paused = true;
     });
 
-       /**
-        * 
-       manualBtn.addEventListener("click", () => {
+    newGameBtn.addEventListener("click",()=>{
+        menuOverlayPause.style.display="none";
+        paused = true;
+        menuOverlay.style.display="flex";
+        paused = true ;
+      
+    });
+
+    continueBtn.addEventListener("click", () => {
+        menuOverlayPause.style.display = "none";
+        paused = false; 
+    });
+
+    manual.addEventListener("click", () => {
+        menuOverlayPause.style.display="none";
         pdfViewer.style.display = "flex";
-        });
-        
-        */
+        paused = true;
+    });
 
     splitPdf.addEventListener('click', () => {
         board.classList.toggle('split');
@@ -148,6 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
     closePdf.addEventListener("click", () => {
         pdfViewer.style.display = "none";
         board.setAttribute("class", "center");
+        paused = false;
     });
        
        
