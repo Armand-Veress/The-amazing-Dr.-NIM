@@ -57,6 +57,8 @@ async function loadGame_playDrNIM(marbleNum, goal, playersTurn, impossible){ // 
     signal = true;
     
     let lastTurn;
+    const yourTurnLabel = document.getElementById("your-turn");
+    const nimTurnLabel = document.getElementById("nim-turn");
 
     if(impossible == true){
         window.addEventListener("keydown", equalListener);
@@ -69,6 +71,15 @@ async function loadGame_playDrNIM(marbleNum, goal, playersTurn, impossible){ // 
             playersTurn = true;
         else if(signal && turner.flipped == 1)
             playersTurn = false;
+
+        if(playersTurn == true){
+            yourTurnLabel.style.display = "flex";
+            nimTurnLabel.style.display = "none";
+        }
+        if(playersTurn == false){
+            yourTurnLabel.style.display = "none";
+            nimTurnLabel.style.display = "flex";
+        }
            
         if(playersTurn && signal && !paused) {
             nextTurn = turner.flipped;

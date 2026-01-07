@@ -566,3 +566,23 @@ body{
 #menu-box-pause button:hover {
     background-color: #9f6012;
 }
+
+.turn-label{
+  position: absolute;
+  top: 85%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.turn-label p{
+  font-size: 25px;
+  padding: 5pt;
+  background-color: rgb(238, 240, 227);;
+  border-style:solid;
+  border-color: black;
+  border-radius: 5%;
+}
+
+.turn-label{
+  display: none;
+}

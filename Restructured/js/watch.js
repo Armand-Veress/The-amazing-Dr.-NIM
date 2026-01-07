@@ -54,16 +54,29 @@ async function loadGame_watchDrNIM(marbleNum, goal){ // watch Dr. NIM play again
     await delay(500);
     signal = true;
     
-    let DrNIMturn = 1; // 1- Dr. NIM 1 starts first; 2 - Dr. NIM 2's turn
+    const drnim1Label = document.getElementById("nim1-turn");
+    const drnim2Label = document.getElementById("nim2-turn");
+    let DrNIMturn = true;
     let lastTurn;
 
     await delay(2000);
 
-    for(let i = 0; i < marbleNum; i++) {   
+    for(let i = 0; i < marbleNum; i++) {  
+
+        if(DrNIMturn == true){
+            drnim1Label.style.display = "flex";
+            drnim2Label.style.display = "none";
+        }
+        else if(DrNIMturn == false){
+            drnim1Label.style.display = "none";
+            drnim2Label.style.display = "flex";
+        }
+        
         if(signal && !paused){
             if(turner.flipped == -1){
                 await delay(1000);
                 turn(turner);
+                DrNIMturn = !DrNIMturn;
                 await delay(600);
             }
 
@@ -99,13 +112,13 @@ async function loadGame_watchDrNIM(marbleNum, goal){ // watch Dr. NIM play again
 
     await waitForSignal();
     if(goal == 1){
-        if(lastTurn == 1)
+        if(lastTurn == true)
             alert("Game ended: Dr. NIM 1 wins!");
         else
             alert("Game ended: Dr. NIM 2 wins!");
     }
     if(goal == -1){
-        if(lastTurn == 2)
+        if(lastTurn == false)
             alert("Game ended: Dr. NIM 1 wins!");
         else
             alert("Game ended: Dr. NIM 2 wins!");
