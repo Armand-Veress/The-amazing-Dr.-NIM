@@ -1,3 +1,5 @@
+pauseBtn.style.display = "flex";
+
 const rawData = localStorage.getItem('Parameters');
 
 if (rawData) {
@@ -95,7 +97,7 @@ async function loadGame_watchDrNIM(marbleNum, goal){ // watch Dr. NIM play again
         else  {
             await delay(200); 
             i -= 1;
-            if(marbles[i].pusherTriggered){
+            if(i >= 0 && marbles[i].pusherTriggered){
                 try{
                     signal = false;
                     i += 1;
@@ -113,14 +115,14 @@ async function loadGame_watchDrNIM(marbleNum, goal){ // watch Dr. NIM play again
     await waitForSignal();
     if(goal == 1){
         if(lastTurn == true)
-            alert("Game ended: Dr. NIM 1 wins!");
+            myAlert("Game ended:", "Dr. NIM 1 wins!");
         else
-            alert("Game ended: Dr. NIM 2 wins!");
+            myAlert("Game ended:", "Dr. NIM 2 wins!");
     }
     if(goal == -1){
         if(lastTurn == false)
-            alert("Game ended: Dr. NIM 1 wins!");
+            myAlert("Game ended:", "Dr. NIM 1 wins!");
         else
-            alert("Game ended: Dr. NIM 2 wins!");
+            myAlert("Game ended:", "Dr. NIM 2 wins!");
     }
 }

@@ -1,3 +1,5 @@
+pauseBtn.style.display = "flex";
+
 const rawData = localStorage.getItem('Parameters');
 
 if (rawData) {
@@ -65,9 +67,12 @@ async function loadGame_playDrNIM(marbleNum, goal, playersTurn, impossible){ // 
         document.getElementById(equalizer.element_id).addEventListener("click", equalizerListener);
     }
 
+    let firstTurn = playersTurn;;
     let marblesRolled = 0;
     for(let i = 0; i < marbleNum; i++) {
-        if(signal && turner.flipped == -1)
+        if(impossible == true && firstTurn == true)
+            playersTurn = true;
+        else if(signal && turner.flipped == -1)
             playersTurn = true;
         else if(signal && turner.flipped == 1)
             playersTurn = false;
@@ -84,34 +89,53 @@ async function loadGame_playDrNIM(marbleNum, goal, playersTurn, impossible){ // 
         if(playersTurn && signal && !paused) {
             nextTurn = turner.flipped;
 
-            const keydownPromise = waitForKey('Enter');
-            const mousedownPromise = waitForEvent(trigger, 'mousedown');
-            const nextTurnPromise = waitForEvent(document.getElementById(turner.element_id), 'click');
+            const enterPromise = waitForKey('Enter');
+            const spacebarPromise = waitForKey(' ');
+            const rollPromise = Promise.race([
+                tagPromise(enterPromise, 'roll'),
+                tagPromise(waitForEvent(trigger, 'mousedown'), 'roll'),
+            ]);
+            const nextTurnPromise = Promise.race([
+                tagPromise(spacebarPromise, 'nextTurn'),
+                tagPromise(waitForEvent(document.getElementById(turner.element_id), 'mousedown'), 'nextTurn'),
+            ]);
+    
 
             const solved = await Promise.race([
-                tagPromise(keydownPromise, 'keydown'),
-                tagPromise(mousedownPromise, 'mousedown'),
-                tagPromise(nextTurnPromise, 'turnerClick')
+                tagPromise(rollPromise, 'roll'),
+                tagPromise(nextTurnPromise, 'nextTurn'),
             ]);
 
             window.removeEventListener("keydown", equalListener);
             document.getElementById(equalizer.element_id).removeEventListener("click", equalizerListener);
 
-            if(solved.source == 'keydown' || solved.source == 'mousedown'){
+            if(solved.source == 'roll'){
+                if(impossible == true && firstTurn == true){
+                    marblesRolled = i;
+                    console.log(marblesRolled);
+                }
                 if(marblesRolled == 3){
-                    alert("You can only roll up to 3 marbles per turn! Switch the turner-lever to end your turn.");
+                    paused = true;
+                    myAlert("Illegal move!", "You can only roll up to 3 marbles per turn! Switch the turner-lever to end your turn.");
                     i = i-1;
                     continue;
                 }
             }
 
-            if(solved.source == 'turnerClick'){
-                if(marblesRolled == 0){
-                    alert("You must roll at least one marble before switching turns!");
+            if(solved.source == 'nextTurn'){
+                if(impossible == true && firstTurn == true && marblesRolled == 0){
+                    turn(turner);
+                    i = i-1;
+                    continue;
+                }
+                else if(marblesRolled == 0){
+                    paused = true;
+                    myAlert("Illegal move!", "You must roll at least one marble before switching turns!");
                     i = i-1;
                     continue;
                 }
 
+                firstTurn = false;
                 turn(turner);
                 marblesRolled = -1;
                 await delay(400);
@@ -151,7 +175,7 @@ async function loadGame_playDrNIM(marbleNum, goal, playersTurn, impossible){ // 
         else  {
             await delay(200); 
             i -= 1;
-            if(marbles[i].pusherTriggered){
+            if(i >= 0 && marbles[i].pusherTriggered){
                 try{
                     signal = false;
                     i += 1;
@@ -169,14 +193,14 @@ async function loadGame_playDrNIM(marbleNum, goal, playersTurn, impossible){ // 
     await waitForSignal();
     if(goal == 1){
         if(lastTurn == true)
-            alert("Game ended: You win!");
+            myAlert("Game ended:", "You win!");
         else
-            alert("Game ended: Dr. NIM wins!");
+            myAlert("Game ended:", "Dr. NIM wins!");
     }
     if(goal == -1){
         if(lastTurn == false)
-            alert("Game ended: You win!");
+            myAlert("Game ended:", "You win!");
         else
-            alert("Game ended: Dr. NIM wins!");
+            myAlert("Game ended:", "Dr. NIM wins!");
     }
 }

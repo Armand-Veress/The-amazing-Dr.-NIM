@@ -25,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (originalBtn) {
         originalBtn.onclick = () => {
             window.location.search = "?:original";
+            paused = false;
         };
     }
     
@@ -106,8 +107,9 @@ document.addEventListener("DOMContentLoaded", () => {
             };
             
             localStorage.setItem('Parameters', JSON.stringify(param));
-            
+
             window.location.search = "?:" + mode;
+            paused = false;
         };
     }
     
@@ -120,6 +122,7 @@ document.addEventListener("DOMContentLoaded", () => {
 */
   
     const board = document.getElementById("board");
+    const labels = document.querySelectorAll(".turn-label");
     const pauseBtn=document.getElementById("pauseBtn");
     const menuOverlayPause=document.getElementById("menu-overlay-pause");
     const newGameBtn = document.getElementById("new-game");
@@ -128,41 +131,59 @@ document.addEventListener("DOMContentLoaded", () => {
     const splitPdf = document.getElementById("split-pdf");
     const closePdf = document.getElementById("close-pdf");
        
-    pauseBtn.addEventListener("click",()=>{
-        menuOverlayPause.style.display="flex";
-        paused = true;
-    });
+    if(pauseBtn){
+        pauseBtn.onclick = ()=>{
+            menuOverlayPause.style.display="flex";
+            paused = true;
+        };
+    }
 
-    newGameBtn.addEventListener("click",()=>{
-        menuOverlayPause.style.display="none";
-        paused = true;
-        menuOverlay.style.display="flex";
-        paused = true ;
-      
-    });
+    if(newGameBtn){
+        newGameBtn.onclick = ()=>{
+            window.location.search = "";
+        };
+    }
 
-    continueBtn.addEventListener("click", () => {
-        menuOverlayPause.style.display = "none";
-        paused = false; 
-    });
+    if(continueBtn){
+        continueBtn.onclick = () => {
+            menuOverlayPause.style.display = "none";
+            paused = false; 
+            pauseBtn.style.display = "flex";
+        };
+    }
 
-    manual.addEventListener("click", () => {
-        menuOverlayPause.style.display="none";
-        pdfViewer.style.display = "flex";
-        paused = true;
-    });
-
-    splitPdf.addEventListener('click', () => {
-        board.classList.toggle('split');
-        pdfViewer.classList.toggle('split');
-    });
+    if(manualBtn){
+        manualBtn.onclick = () => {
+            menuOverlayPause.style.display="none";
+            pdfViewer.style.display = "flex";
+        };
+    }
+    
+    if(splitPdf){
+        splitPdf.onclick = () => {
+            board.classList.toggle('split');
+            pdfViewer.classList.toggle('split');
+            paused = !paused;
+            
+            labels.forEach(label => {
+                label.classList.toggle('split');
+            });
+        };
+    }
        
-    closePdf.addEventListener("click", () => {
-        pdfViewer.style.display = "none";
-        pdfViewer.setAttribute("class", "center");
-        board.setAttribute("class", "center");
-        paused = false;
-    });
+    if(closePdf){
+        closePdf.onclick = () => {
+            pdfViewer.style.display = "none";
+            pdfViewer.setAttribute("class", "center");
+            board.setAttribute("class", "center");
+            paused = false;
+
+            labels.forEach(label => {
+                label.classList.remove('split');
+                label.classList.add('center');
+            });
+        };
+    }
        
        
    

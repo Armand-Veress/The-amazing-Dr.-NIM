@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="DrNIM-styling.css">
+        <link rel="stylesheet" href="style.css">
     </head>
 
 <body>
@@ -9,7 +9,7 @@
 <div id="board">
     <svg id="board-game"
          viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
-    
+
     <g class="board-piece" id="board-margin">
         <path 
             d="M 40.161 586.128 
@@ -23,6 +23,10 @@
             L 40.161 586.128 
             Z">
         </path>
+    </g>
+
+    <g id="goal-dot">
+        <circle cx="70" cy="600" r="15"/>
     </g>
     
     <g id = "board-background">
@@ -502,6 +506,14 @@
         </path>
     </g>
     
+    <g id="info-help">
+        <svg x="87.5" y="2.5" width="10" height="10" viewBox="0 0 24 24" id="info-icon" style="cursor: pointer;">
+        <circle cx="12" cy="12" r="9" stroke-width="1"/>
+        <path d="M12 11V17" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M11.75 8V7H12.25V8H11.75Z" stroke-width="1.5"/>
+        </svg>
+    </g>
+
 
     <defs>
         <radialGradient id="marbleGradient" cx="50%" cy="50%" r="50%">
@@ -513,46 +525,240 @@
     </defs>
 
     </svg>
+
+    <svg id="tutorial-svg" class="hidden"
+         viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet">
+    
+    <g class="tutorial" id="text-trigger">
+        <title>Text-trigger</title>
+        <polyline style="fill: none; stroke: rgba(112, 0, 0, 0.8);" stroke-width="2" 
+            points="615 545 690.784 458.719 734.235 458.896"/>
+    
+        <rect x="725" y="432.587" width="174.501" height="60" stroke-width="1.5"
+            style="fill: rgb(238, 240, 227); stroke: rgba(112, 0, 0, 0.8);"/>
+
+        <text style="fill: rgba(112, 0, 0, 0.8); font-family: Arial, sans-serif; font-size: 15px; text-anchor: middle;">
+            <tspan x="812.5" y="452">Push trigger to release</tspan>
+            <tspan x="812.5" dy="1.1em">the next marble</tspan>
+            <tspan x="812.5" dy="1.2em" style="font-size: 14px;">(Cursor click or Enter)</tspan>
+        </text>
+    </g>
+
+    <g class="tutorial" id="text-turner">
+        <title>Text-turner</title>
+        <polyline style="fill: none; stroke: rgba(112, 0, 0, 0.8);" stroke-width="2" 
+            points="458.82 535.578 526.408 673.965 606.363 673.626"/>
+    
+        <rect x="601.462" y="644.974" width="199.05" height="60" stroke-width="1.5"
+            style="fill: rgb(238, 240, 227); stroke: rgba(112, 0, 0, 0.8);"/>
+
+        <text style="fill: rgba(112, 0, 0, 0.8); font-family: Arial, sans-serif; font-size: 15px; text-anchor: middle;">
+            <tspan x="701" y="663">Switch turner to the left</tspan>
+            <tspan x="701" dy="1.1em">to end your turn</tspan>
+            <tspan x="701" dy="1.2em" style="font-size: 14px;">(Cursor click or Space Bar)</tspan>
+        </text>
+    </g>
+
+    <g class="tutorial" id="text-equalizer">
+        <title>text-equalizer</title>
+        <polyline style="fill: none; stroke: rgba(112, 0, 0, 0.8);" stroke-width="2" 
+            points="460.814 402.139 625.303 272.263 727.872 272.44"/>
+    
+        <rect x="718.914" y="246.131" width="174.501" height="97.517" stroke-width="1.5"
+            style="fill: rgb(238, 240, 227); stroke: rgba(112, 0, 0, 0.8);"/>
+
+        <text style="fill: rgba(112, 0, 0, 0.8); font-family: Arial, sans-serif; font-size: 15px; text-anchor: middle;">
+            <tspan x="806.16" y="268">Equalizer piece:</tspan>
+            <tspan x="806.16" dy="1.1em">positioned at start</tspan>
+            <tspan x="806.16" dy="1.1em">for configuration</tspan>
+            <tspan x="806.16" dy="1.2em" style="font-size: 15px;">(*Original: Cursor click)</tspan>
+            <tspan x="806.16" dy="1.1em">{ Consult the manual }</tspan>
+        </text>
+    </g>
+
+    <g class="tutorial" id="text-levers">
+        <title>Text-levers</title>
+        <path style="fill: none; stroke: rgba(112, 0, 0, 0.8);" stroke-width="2" 
+            d="M 321.823 274.122 L 220.086 31.874 L 204.878 -18.592 L 308.722 44.956 L 494.449 247.387"/>
+        <polyline style="fill: none; stroke: rgba(112, 0, 0, 0.8);" stroke-width="2" 
+            points="408.448 261.098 252.844 37.679 204.281 -18.472"/>
+    
+        <rect x="120.926" y="-80.27" width="342.996" height="58.544" stroke-width="1.5"
+            style="fill: rgb(238, 240, 227); stroke: rgba(112, 0, 0, 0.8);"/>
+
+        <text style="fill: rgba(112, 0, 0, 0.8); font-family: Arial, sans-serif; font-size: 15px; text-anchor: middle;">
+            <tspan x="292.42" y="-58">Flip-flop levers: positioned at start configuration</tspan>
+            <tspan x="292.42" dy="1.2em">(*Original: Cursor click) { Consult the manual }</tspan>
+        </text>
+    </g>
+
+    <g class="tutorial" id="text-goal">
+        <title>Text-Goal</title>
+        <polyline style="fill: none; stroke: rgba(112, 0, 0, 0.8);" stroke-width="2" 
+            points="68.97 598.261 28.061 599.367 0.42 645.803"/>
+    
+        <rect x="-40.497" y="641.381" width="266.032" height="44.849" stroke-width="1.5"
+            style="fill: rgb(238, 240, 227); stroke: rgba(112, 0, 0, 0.8);"/>
+
+        <text style="fill: rgba(112, 0, 0, 0.8); font-family: Arial, sans-serif; font-size: 15px; text-anchor: middle;">
+            <tspan x="92.52" y="662">Goal: Whoever takes the last marble</tspan>
+            <tspan x="92.52" dy="1.2em">wins (green) / loses (red)</tspan>
+        </text>
+    </g>
+    </svg>
 </div>
+
+
+
 <!-- Start - Main menu && Pause button -->
 <button id="pauseBtn">
     <span></span>
     <span></span>
 </button>
+ 
+<!-- <div id="menu-overlay"> 
+    <div id="menu-box">
+    <button id="newGameBtn">New Game</button>
+    <button id="continueBtn">Continue</button>
+    <button id="manualBtn">Manual</button>
+    </div>
+</div> -->
 
 <div id="menu-overlay">
   <div id="menu-box">
-    <h1>Dr. Nim</h1>
-    <button id="start-btn">Start Game</button>
+    <h1>Play Dr. Nim!</h1>
+    <button id="original-btn">Original Dr. NIM</button>
+    <button id="play-dr-nim-btn">Play against Dr. NIM</button>
+    <button id="watch-dr-nim-btn">Dr. NIM vs DR. NIM </button>
     <button id="rules-btn">Rules</button>
-    <button id="exit-btn">Exit</button>
   </div>
-</div>  
+</div> 
+
+<div id="menu-overlay-pause">
+  <div id="menu-box-pause">
+    <h1>Dr. Nim</h1>
+    <button id="new-game">New Game</button>
+    <button id="continue">Continue</button>
+    <button id="manual">Manual</button>
+  </div>
+</div> 
+
+
+
+<div id="pdf-viewer">
+  <div id="pdf-header">
+    <span>Manual</span>
+    <div class="header-buttons">
+    <button id="split-pdf">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" 
+            d="M6 4C4.34315 4 3 5.34315 3 7V17
+            C3 18.6569 4.34315 20 6 20H18
+            C19.6569 20 21 18.6569 21 17V7
+            C21 5.34315 19.6569 4 18 4H6ZM5 7
+            C5 6.44772 5.44772 6 6 6H11V18H6
+            C5.44772 18 5 17.5523 5 17V7ZM13 18H18
+            C18.5523 18 19 17.5523 19 17V7
+            C19 6.44772 18.5523 6 18 6H13V18Z" 
+            fill="#000000"/>
+        </svg>
+    </button>
+    <button id="close-pdf">✖</button>
+    </div>
+  </div>
+
+<iframe id="pdf-frame" allow="fullscreen"
+        src="https://www.cs.miami.edu/home/burt/learning/Csc427.152/491_Dr-Nim-Manual5b15d.pdf#toolbar=1&navpanes=0&zoom=page-width">
+</iframe>
+
+</div>
+
+
 
 <div id="rules">    
     <h1>Dr. Nim – Game Rules</h1>
     <p>
-        1.The game starts with a certain number of marbles (for example, 12).<br>
-        2.On each turn, you or Dr. Nim can take 1, 2, or 3 marbles from the pile.<br>
+        1.The game starts with a certain number of marbles (for example, 15).<br>
+        2.On each turn, you or Dr. Nim can take <b>1, 2, or 3</b> marbles from the pile.<br>
         3.Players take turns removing marbles.<br>
-        4.The player who takes the last marble wins the game.<br>
-        5.The player who takes the last marble wins the game.<br>
+        4.Depending on the goal the player who takes the <b>last marble</b> either <b>wins</b> / <b>loses</b> the game.<br>
         <br>
-        Tip:<br>
+        <b>Tip:</b><br>
         Try to find a pattern in how Dr. Nim plays.<br>
         If you can predict his moves, you might discover the secret to always winning!<br>
+        <br>
         <button id="close-rules">Close Rules</button>
     </p>
 </div>
+
+<img src="illustrations/top-left.png" class="corner-image top-left">
+<img src="illustrations/top-right.png" class="corner-image top-right">
+<img src="illustrations/bottom-left.png" class="corner-image bottom-left">
+<img src="illustrations/bottom-right.png" class="corner-image bottom-right">
+
 <!-- END - Main menu && Pause button -->
 
+<div id="configurations-menu">
+  <div id="submenu-box">
+    <h1>Configurations: </h1>
+    <div id="marble-bar">
+        <label>Number of marbles: <span id="marbleNum">12</span></label><br>
+        <input type="range" id="bar" min="8" max="15" value="12">
+    </div>
+    <div class="choice-row">
+        <p>Goal (Whoever takes the last marble):</p>
+        <label><input type="radio" name="goal" value="wins" checked> Wins</label>
+        <label><input type="radio" name="goal" value="looses"> Looses</label>
+    </div>
+
+    <div class="choice-row" id="turn-choice">
+        <p>First turn (Who gets to start):</p>
+        <label><input type="radio" name="turn" value="true" checked> You</label>
+        <label><input type="radio" name="turn" value="false"> Dr. NIM</label>
+    </div>
+
+    <div class="choice-row" id="impossible-choice">
+        <p>Configuration (Difficulty level):</p>
+        <label><input type="radio" name="impossible" value="false" checked> Normal</label>
+        <label><input type="radio" name="impossible" value="true"> Impossible</label>
+    </div>
+    <br>
+    <button id="confirm">Confirm</button>
+  </div>
+</div> 
+
+<!-- END - Configurations submenu -->
+
+<div class = "turn-label" id="nim-turn">
+    <p> Dr. NIM's turn </p>
+</div>
+<div class = "turn-label" id="your-turn">
+    <p> Your turn </p>
+</div>
+<div class = "turn-label" id="nim1-turn">
+    <p>Dr. NIM 1's turn</p>
+</div>
+<div class = "turn-label" id="nim2-turn">
+    <p>Dr. NIM 2's turn</p>
+</div>
+
+<dialog id="customAlert">
+  <h2 id="alertTitle"  tabindex="-1"></h2>
+  <p id="alertMsg"></p>
+  <button id="closeAlert">Close</button>
+</dialog>
 
 
+<script src="js/game-logics.js"></script>
+<script src="js/menu.js"></script>
+<script>
+    const query = window.location.search;
+    const pageName = query.includes('?:') ? query.replace('?:', '') : 'start';
 
-
-
-
-<script src="DrNIM-remastered.js"></script>
+    const script = document.createElement('script');
+    script.src = `js/${pageName}.js`;
+    document.body.appendChild(script);
+</script>
 
 </body>
 

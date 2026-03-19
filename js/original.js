@@ -1,3 +1,5 @@
+pauseBtn.style.display = "flex";
+
 loadGame_originalDrNIM(15);
 
 async function loadGame_originalDrNIM(marbleNum){ // just as the original physical model of Dr. NIM
@@ -64,7 +66,7 @@ async function loadGame_originalDrNIM(marbleNum){ // just as the original physic
         else  {
             await delay(200); 
             i -= 1;
-            if(marbles[i].pusherTriggered){
+            if(i >= 0 && marbles[i].pusherTriggered){
                 try{
                     signal = false;
                     i += 1;

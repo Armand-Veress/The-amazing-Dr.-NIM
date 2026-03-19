@@ -1,8 +1,33 @@
+const dialog = document.getElementById('customAlert');
+const closeAlert = document.getElementById('closeAlert');
+
+function myAlert(title, message, closeMsg="Close") {
+  document.getElementById('alertTitle').textContent = title;
+  document.getElementById('alertMsg').textContent = message;
+  if(title === "Game ended:") {
+    closeMsg = "Homepage";
+      closeAlert.addEventListener('click', () => {
+        window.location.search = "";
+      });
+  }
+  else {
+    closeAlert.addEventListener('click', () => {
+        paused = false;
+        dialog.close();
+    });
+  }
+  document.getElementById('closeAlert').textContent = closeMsg;
+
+  dialog.showModal(); 
+  document.getElementById('alertTitle').focus();
+}
+
 const board_transforms = {scale: 0.15, translateX: -5, translateY: -1};
 const boardGame = document.getElementById("board-game");
 const marbles = [];
 let signal = true;
 let paused = false;
+let marbleChain = 0;
 
 const path_1 = document.querySelector("#path-1 path");
 const path_1_Length = path_1.getTotalLength();
@@ -817,13 +842,13 @@ function determine_path() {
         return 2;
     else if (right_flip_flop.flipped == -1 && middle_flip_flop.flipped ==  1 && equalizer.flipped == -1)
         return 3;
-    else if (right_flip_flop.flipped == -1 && equalizer.flipped ==  1 && turner.flipped == -1)
+    else if (right_flip_flop.flipped == -1 && middle_flip_flop.flipped ==  1 && equalizer.flipped ==  1 && turner.flipped == -1)
         return 4;
     else if (right_flip_flop.flipped == -1 && middle_flip_flop.flipped ==  1 && equalizer.flipped ==  1 && turner.flipped ==  1)
         return 5;
     else if (right_flip_flop.flipped ==  1 && equalizer.flipped ==  1 && turner.flipped ==  1)
         return 6;
-    else if (right_flip_flop.flipped ==  1 && middle_flip_flop.flipped == -1 && equalizer.flipped ==  1 && turner.flipped == -1)
+    else if (right_flip_flop.flipped ==  1 && equalizer.flipped ==  1 && turner.flipped == -1)
         return 7;
     else if (right_flip_flop.flipped ==  1 && equalizer.flipped == -1)
         return 8;
@@ -1007,102 +1032,301 @@ function lock_pieces(){
 
 function configure_DrNIM(marbleNum, goal, playersTurn, impossible=false){
     
-    if(goal == 1){ // Last marble wins
-        if(marbleNum % 4 == 0){
-            if(left_flip_flop.flipped   == -1)
+    if(impossible == false){
+        if(goal == 1){ // Last marble wins
+            if(marbleNum % 4 == 0){
+                if(left_flip_flop.flipped   == -1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped ==  1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  ==  1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        ==  1)
+                    turn(equalizer);
+            }
+            else if(marbleNum % 4 == 3){
+                if(left_flip_flop.flipped   ==  1)
                 turn(left_flip_flop);
-            if(middle_flip_flop.flipped ==  1)
-                turn(middle_flip_flop);
-            if(right_flip_flop.flipped  ==  1)
-                turn(right_flip_flop);
-            if(equalizer.flipped        ==  1)
-                turn(equalizer);
+                if(middle_flip_flop.flipped == -1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  ==  1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        ==  1)
+                    turn(equalizer);
+            }
+            else if(marbleNum % 4 == 2){
+                if(left_flip_flop.flipped   ==  1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped ==  1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  == -1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        ==  1)
+                    turn(equalizer);
+            }
+            else if(marbleNum % 4 == 1){
+                if(left_flip_flop.flipped   ==  1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped ==  1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  ==  1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        ==  1)
+                    turn(equalizer);
+            }
         }
-        else if(marbleNum % 4 == 3){
-            if(left_flip_flop.flipped   ==  1)
-            turn(left_flip_flop);
-            if(middle_flip_flop.flipped == -1)
-                turn(middle_flip_flop);
-            if(right_flip_flop.flipped  ==  1)
-                turn(right_flip_flop);
-            if(equalizer.flipped        ==  1)
-                turn(equalizer);
+        else if(goal == -1){ // Last marble looses
+            if(marbleNum % 4 == 0){
+                if(left_flip_flop.flipped   ==  1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped == -1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  ==  1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        ==  1)
+                    turn(equalizer);
+            }
+            else if(marbleNum % 4 == 3){
+                if(left_flip_flop.flipped   ==  1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped ==  1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  == -1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        ==  1)
+                    turn(equalizer);
+            }
+            else if(marbleNum % 4 == 2){
+                if(left_flip_flop.flipped   ==  1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped ==  1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  ==  1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        ==  1)
+                    turn(equalizer);
+            }
+            else if(marbleNum % 4 == 1){
+                if(left_flip_flop.flipped   == -1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped ==  1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  ==  1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        ==  1)
+                    turn(equalizer);
+            }    
         }
-        else if(marbleNum % 4 == 2){
-            if(left_flip_flop.flipped   ==  1)
-                turn(left_flip_flop);
-            if(middle_flip_flop.flipped ==  1)
-                turn(middle_flip_flop);
-            if(right_flip_flop.flipped  == -1)
-                turn(right_flip_flop);
-            if(equalizer.flipped        ==  1)
-                turn(equalizer);
+        
+        if(playersTurn == true){
+            if(turner.flipped ==  1)
+                turn(turner);
         }
-        else if(marbleNum % 4 == 1){
-            if(left_flip_flop.flipped   ==  1)
-                turn(left_flip_flop);
-            if(middle_flip_flop.flipped ==  1)
-                turn(middle_flip_flop);
-            if(right_flip_flop.flipped  ==  1)
-                turn(right_flip_flop);
-            if(equalizer.flipped        ==  1)
-                turn(equalizer);
+        else if (playersTurn == false){
+            if(turner.flipped == -1)
+                turn(turner);
         }
     }
-    else if(goal == -1){ // Last marble looses
-        if(marbleNum % 4 == 0){
-            if(left_flip_flop.flipped   ==  1)
-                turn(left_flip_flop);
-            if(middle_flip_flop.flipped == -1)
-                turn(middle_flip_flop);
-            if(right_flip_flop.flipped  ==  1)
-                turn(right_flip_flop);
-            if(equalizer.flipped        ==  1)
-                turn(equalizer);
+    else if(impossible == true) {
+        if(goal == 1 && playersTurn == true){ // Last marble wins
+            if(marbleNum % 4 == 0){
+                if(left_flip_flop.flipped   == -1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped ==  1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  ==  1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        == -1)
+                    turn(equalizer);
+                if(turner.flipped           ==  1)
+                    turn(turner);
+            }
+            else if(marbleNum % 4 == 3){
+                if(left_flip_flop.flipped   ==  1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped ==  1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  == -1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        ==  1)
+                    turn(equalizer);
+            }
+            else if(marbleNum % 4 == 2){
+                if(left_flip_flop.flipped   == -1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped == -1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  ==  1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        == -1)
+                    turn(equalizer);
+                if(turner.flipped           == -1)
+                    turn(turner);
+            }
+            else if(marbleNum % 4 == 1){
+                if(left_flip_flop.flipped   == -1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped ==  1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  == -1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        == -1)
+                    turn(equalizer);
+                if(turner.flipped           == -1)
+                    turn(turner);
+            }
         }
-        else if(marbleNum % 4 == 3){
-            if(left_flip_flop.flipped   ==  1)
-                turn(left_flip_flop);
-            if(middle_flip_flop.flipped ==  1)
-                turn(middle_flip_flop);
-            if(right_flip_flop.flipped  == -1)
-                turn(right_flip_flop);
-            if(equalizer.flipped        ==  1)
-                turn(equalizer);
+        else if(goal == 1 && playersTurn == false){ // Last marble wins
+            if(marbleNum % 4 == 0){
+                if(left_flip_flop.flipped   ==  1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped == -1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  ==  1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        ==  1)
+                    turn(equalizer);
+                if(turner.flipped           ==  1)
+                    turn(turner);
+            }
+            else if(marbleNum % 4 == 3){
+                if(left_flip_flop.flipped   ==  1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped == -1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  ==  1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        == -1)
+                    turn(equalizer);
+                if(turner.flipped           ==  1)
+                    turn(turner);
+            }
+            else if(marbleNum % 4 == 2){
+                if(left_flip_flop.flipped   ==  1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped ==  1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  == -1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        == -1)
+                    turn(equalizer);
+                if(turner.flipped           ==  1)
+                    turn(turner);
+            }
+            else if(marbleNum % 4 == 1){
+                if(left_flip_flop.flipped   ==  1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped ==  1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  ==  1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        == -1)
+                    turn(equalizer);
+                if(turner.flipped           ==  1)
+                    turn(turner);
+            }
         }
-        else if(marbleNum % 4 == 2){
-            if(left_flip_flop.flipped   ==  1)
+        else if(goal == -1 && playersTurn == true){ // Last marble wins
+            if(marbleNum % 4 == 0){
+                if(left_flip_flop.flipped   == -1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped ==  1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  ==  1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        == -1)
+                    turn(equalizer);
+                if(turner.flipped           ==  1)
+                    turn(turner);
+            }
+            else if(marbleNum % 4 == 3){
+                if(left_flip_flop.flipped   ==  1)
                 turn(left_flip_flop);
-            if(middle_flip_flop.flipped ==  1)
-                turn(middle_flip_flop);
-            if(right_flip_flop.flipped  ==  1)
-                turn(right_flip_flop);
-            if(equalizer.flipped        ==  1)
-                turn(equalizer);
+                if(middle_flip_flop.flipped == -1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  ==  1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        ==  1)
+                    turn(equalizer);
+                if(turner.flipped           ==  1)
+                    turn(turner);
+            }
+            else if(marbleNum % 4 == 2){
+                if(left_flip_flop.flipped   ==  1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped ==  1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  == -1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        ==  1)
+                    turn(equalizer);
+                if(turner.flipped           ==  1)
+                    turn(turner);
+            }
+            else if(marbleNum % 4 == 1){
+                if(left_flip_flop.flipped   == -1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped ==  1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  ==  1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        == -1)
+                    turn(equalizer);
+                if(turner.flipped           ==  1)
+                    turn(turner);
+            }
         }
-        else if(marbleNum % 4 == 1){
-            if(left_flip_flop.flipped   == -1)
-                turn(left_flip_flop);
-            if(middle_flip_flop.flipped ==  1)
-                turn(middle_flip_flop);
-            if(right_flip_flop.flipped  ==  1)
-                turn(right_flip_flop);
-            if(equalizer.flipped        ==  1)
-                turn(equalizer);
-        }    
+        else if(goal == -1 && playersTurn == false){ // Last marble wins
+            if(marbleNum % 4 == 0){
+                if(left_flip_flop.flipped   ==  1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped == -1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  ==  1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        == -1)
+                    turn(equalizer);
+                if(turner.flipped           ==  1)
+                    turn(turner);
+            }
+            else if(marbleNum % 4 == 3){
+                if(left_flip_flop.flipped   ==  1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped ==  1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  == -1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        == -1)
+                    turn(equalizer);
+                if(turner.flipped           ==  1)
+                    turn(turner);
+            }
+            else if(marbleNum % 4 == 2){
+                if(left_flip_flop.flipped   ==  1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped ==  1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  ==  1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        == -1)
+                    turn(equalizer);
+                if(turner.flipped           ==  1)
+                    turn(turner);
+            }
+            else if(marbleNum % 4 == 1){
+                if(left_flip_flop.flipped   == -1)
+                    turn(left_flip_flop);
+                if(middle_flip_flop.flipped ==  1)
+                    turn(middle_flip_flop);
+                if(right_flip_flop.flipped  ==  1)
+                    turn(right_flip_flop);
+                if(equalizer.flipped        ==  1)
+                    turn(equalizer);
+                if(turner.flipped           ==  1)
+                    turn(turner);
+            }
+        }
     }
-    
-    if(playersTurn == true){
-        if(turner.flipped ==  1)
-            turn(turner);
-    }
-    else if (playersTurn == false){
-        if(turner.flipped == -1)
-            turn(turner);
-    }
-
-    if(impossible == true)
-        turn(equalizer);
 }
 
 function determineGoal(goal){
